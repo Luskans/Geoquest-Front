@@ -1,19 +1,29 @@
-import { Stack, Slot } from "expo-router";
-import { View } from 'react-native';
+import { Stack } from "expo-router";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import "@/global.css";
+import { LinearGradient } from "expo-linear-gradient";
+import { useTheme } from '@react-navigation/native';
+import { ImageBackground } from 'react-native';
+import { useFonts } from "expo-font";
+import { ThemeProvider } from "@/stores/ThemeProvider";
+
 
 // Maintient le splashscreen visible pendant le chargement
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = "salut" // useFont ou useAsset
+  const theme = useTheme();
+  theme.colors.background = 'transparent';
+  const [loaded] = useFonts({
+    'Abel': require('../assets/fonts/Abel-Regular.ttf'),
+    'Cabin': require('../assets/fonts/Cabin-Variable.ttf'),
+    'Lexend': require('../assets/fonts/Lexend-Variable.ttf'),
+    'Mulish': require('../assets/fonts/Mulish-Variable.ttf'),
+    'Nunito': require('../assets/fonts/Nunito-Variable.ttf'),
+  });
 
   useEffect(() => {
     if (loaded) {
@@ -26,21 +36,37 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <StatusBar style="auto" backgroundColor="#2563EB" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="game" options={{ headerShown: false }} />
-          <Stack.Screen name="auth" options={{ headerShown: false }} />
-          {/* <Stack.Screen name="+not-found" /> */}
-        </Stack>
-      </SafeAreaView>
+    <ThemeProvider>
+      <ImageBackground 
+        source={require('@/assets/images/bgtest.jpg')}
+        className="flex-1"
+        resizeMode="cover"
+      >
+        <SafeAreaView style={{ flex: 1 }} >
+          <StatusBar style="auto" backgroundColor="transparent" translucent />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: 'transparent' }
+            }}
+          >
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="game" options={{ headerShown: false }} />
+            <Stack.Screen name="auth" options={{ headerShown: false  }} />
+          </Stack>
+        </SafeAreaView>
+      </ImageBackground>
     </ThemeProvider>
   );
 }
+
+{/* <LinearGradient
+    colors={
+    colorScheme === 'dark' 
+        ? ['secondary', '#1A1A1A'] // Couleurs pour le thème sombre
+        : ['secondary', '#BD8B9C']  // Couleurs pour le thème clair
+    }
+    className="flex-1"
+>
+</LinearGradient> */}

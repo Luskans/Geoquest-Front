@@ -1,41 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-// module.exports = {
-//   content: ["./app/**/*.{js,jsx,ts,tsx}"],
-//   presets: [require("nativewind/preset")],
-//   darkMode: "class",
-//   theme: {
-//     extend: {
-//       colors: {
-//         'primary': {
-//           DEFAULT: '#f7e76e',
-//           light: '#f7efb2',
-//           dark: '#e8cf13',
-//         },
-//         'custom': {
-//           black: '#292929',
-//           white: '#f5f5f5',
-//           gray: {
-//             DEFAULT: '#f5f5f5',
-//             light: '#cccccc',
-//             dark: '#707070',
-//           },
-//         },
-//       },
-//       fontSize: {
-//         'paragraph': '16px',
-//         'h1': '24px',
-//         'h2': '20px',
-//       },
-//       fontFamily: {
-//         'roboto': ['Roboto'],
-//         'comic': ['Comic'],
-//       },
-//     },
-//   },
-//   plugins: [],
-// }
-
-
 module.exports = {
   content: [
     "./app/**/*.{js,jsx,ts,tsx}",
@@ -45,16 +8,42 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        abel: ['Abel'], // Font par défaut
+        cabin: ['Cabin'], // Font pour les titres
+        lexend: ['Lexend'], // Font pour le code
+        mulish: ['Mulish'], // Font pour le code
+        nunito: ['Nunito'], // Font pour le code
+      },
+      // fontSize: {
+      //   'heading-1': ['32px', { lineHeight: '40px', fontWeight: '700' }],
+      //   'heading-2': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+      //   'heading-3': ['20px', { lineHeight: '28px', fontWeight: '600' }],
+      //   'body': ['16px', { lineHeight: '24px' }],
+      //   'small': ['14px', { lineHeight: '20px' }],
+      // },
       colors: {
-        // Create a custom color that uses a CSS custom value
-        primary: "#f7e76e",
-        secondary: "#db4437",
-        // white: "#f2f2f2",
+        primary: {
+          mid: '',
+          lighter: '',
+          darker: ''
+        },
+        secondary: {
+          mid: '',
+          lighter: '',
+          darker: ''
+        },
         white: "#fff",
-        black: "#141414",
+        black: "#191919",
+        blackRgb: 'rgb(252, 229, 187)',
+        gray: {
+          mid: '',
+          lighter: '',
+          darker: ''
+        },
+        grayRgb: 'rgb(252, 229, 187)'
       },
     },
   },
   plugins: [],
 };
-

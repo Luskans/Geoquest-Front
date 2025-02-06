@@ -37,8 +37,27 @@
         "expo-font",
         {
           "fonts": [
-            "./assets/fonts/Inter-Black.otf",
-            "./assets/fonts/SpaceMono-Regular.ttf"
+            "./assets/fonts/SpaceMono-Regular.ttf",
+            {
+              "asset": "./assets/fonts/Abel-Regular.ttf",
+              "family": "Abel"
+            },
+            {
+              "asset": "./assets/fonts/Cabin-Variable.ttf",
+              "family": "Cabin"
+            },
+            {
+              "asset": "./assets/fonts/Lexend-Variable.ttf",
+              "family": "Lexend"
+            },
+            {
+              "asset": "./assets/fonts/Mulish-Variable.ttf",
+              "family": "Mulish"
+            },
+            {
+              "asset": "./assets/fonts/Nunito-Variable.ttf",
+              "family": "Nunito"
+            }
           ]
         }
       ],
