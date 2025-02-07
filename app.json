@@ -57,6 +57,10 @@
             {
               "asset": "./assets/fonts/Nunito-Variable.ttf",
               "family": "Nunito"
+            },
+            {
+              "asset": "./assets/fonts/Playfair-Variable.ttf",
+              "family": "Playfair"
             }
           ]
         }

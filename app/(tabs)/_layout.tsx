@@ -18,7 +18,56 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: 'transparent',
+          shadowColor: 'transparent',
+          borderRadius: 24,
+          position: 'absolute',
+          bottom: -10,
+          height: 64,
+          borderLeftWidth: 1,
+          borderRightWidth: 1,
+          elevation: 0, // Supprime l'ombre sur Android
+          shadowOpacity: 0, // Supprime l'ombre sur iOS
         },
+        // tabBarStyle: {
+        //   position: 'absolute',
+        //   bottom: 16,
+        //   left: 16,
+        //   right: 16,
+        //   borderRadius: 24,
+        //   height: 64,
+        //   paddingBottom: 8,
+        //   paddingTop: 8,
+        //   backgroundColor: 'blue',
+        //   borderTopWidth: 0,
+        //   elevation: 8,
+        //   shadowColor: 'green',
+        //   shadowOffset: {
+        //     width: 0,
+        //     height: 4,
+        //   },
+        //   shadowOpacity: 0.1,
+        //   shadowRadius: 8,
+        // },
+        // tabBarStyle: {
+        //   position: 'absolute',
+        //   bottom: -10,
+        //   // left: 16,
+        //   // right: 16,
+        //   height: 64,
+        //   borderRadius: 24,
+        //   // backgroundColor: 'white',
+        //   borderTopWidth: 0,
+        //   elevation: 8,
+        //   shadowColor: '#000',
+        //   shadowOffset: {
+        //     width: 0,
+        //     height: 4,
+        //   },
+        //   shadowOpacity: 0.1,
+        //   shadowRadius: 8,
+        //   paddingBottom: 8,
+        //   // paddingHorizontal: 16,
+        // },
       }}
     >
       <Tabs.Screen

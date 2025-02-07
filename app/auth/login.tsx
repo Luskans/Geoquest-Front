@@ -8,10 +8,14 @@ import {
   Platform,
   ActivityIndicator,
   Animated,
+  Image,
 } from 'react-native';
 import { Link, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../hooks/useAuth';
+import ParallaxScrollView from '@/components/common/ParallaxScrollView';
+import colors from "@/constants/colors";
+
 
 export default function LoginScreen() {
   const { login } = useAuth();
@@ -98,47 +102,43 @@ export default function LoginScreen() {
     }
   };
 
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-white"
+return (
+  <KeyboardAvoidingView 
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    className="flex-1"
+  >
+    <ParallaxScrollView
+      headerImage={require('@/assets/images/test6.png')}
+      headerGradient={{
+        colors: [
+          colors.primary.mid,
+          colors.primary.lighter,
+        ]
+      }}
+      headerText="Connecte toi et cherche les indices !"
     >
-      <View className="flex-1 p-6">
-        {/* HEADER */}
-        <View className='flex-col gap-2'>
-          {/* Image */}
-          <View className="flex items-center">
-            <View className="w-72 h-40 bg-gray-400 rounded-lg"></View>
-          </View>
-
-          {/* Baseline */}
-          <View className="">
-            <Text className="text-gray-600 text-center mt-2">
-              Connectez vous dès maintenant !
-            </Text>
-          </View>
-        </View>
+      <View className="flex-1 p-6 justify-center">
 
         {/* Error Message */}
         {errors.general && (
           <Animated.View 
-            className="bg-red-50 p-4 rounded-lg mb-4"
+            className="p-4 rounded-lg mb-4"
             style={{ transform: [{ translateX: shakeAnimation }] }}
           >
-            <Text className="text-red-500 text-center">
+            <Text className="text-red-400 text-center">
               {errors.general}
             </Text>
           </Animated.View>
         )}
-
+        
         {/* FORM */}
-        <View className="space-y-4">
+        <View className="flex-col gap-6">
           {/* Email Input */}
           <View>
-            <Text className="text-gray-700 mb-2">Email</Text>
+            <Text className="text-gray-700 dark:text-gray-100 mb-2">Email</Text>
             <TextInput
-              className={`bg-gray-50 border ${
-                errors.email ? 'border-red-500' : 'border-gray-300'
+              className={`bg-white border ${
+                errors.email ? 'border-red-400' : 'border-gray-300'
               } rounded-lg p-3`}
               value={formData.email}
               onChangeText={(text) => {
@@ -151,17 +151,17 @@ export default function LoginScreen() {
               autoComplete="email"
             />
             {errors.email && (
-              <Text className="text-red-500 text-sm mt-1">{errors.email}</Text>
+              <Text className="text-red-400 text-sm mt-1">{errors.email}</Text>
             )}
           </View>
 
           {/* Password Input */}
           <View>
-            <Text className="text-gray-700 mb-2">Mot de passe</Text>
+            <Text className="text-gray-700 dark:text-gray-100 mb-2">Mot de passe</Text>
             <View className="relative">
               <TextInput
-                className={`bg-gray-50 border ${
-                  errors.password ? 'border-red-500' : 'border-gray-300'
+                className={`bg-white border ${
+                  errors.password ? 'border-red-400' : 'border-gray-300'
                 } rounded-lg p-3 pr-12`}
                 value={formData.password}
                 onChangeText={(text) => {
@@ -184,7 +184,7 @@ export default function LoginScreen() {
               </TouchableOpacity>
             </View>
             {errors.password && (
-              <Text className="text-red-500 text-sm mt-1">{errors.password}</Text>
+              <Text className="text-red-400 text-sm mt-1">{errors.password}</Text>
             )}
           </View>
 
@@ -193,15 +193,15 @@ export default function LoginScreen() {
             onPress={() => router.push('/auth/forgot-password')}
             className="self-end"
           >
-            <Text className="text-primary-600">
+            <Text className="text-gray-700 dark:text-gray-100">
               Mot de passe oublié ?
             </Text>
           </TouchableOpacity>
 
           {/* Login Button */}
           <TouchableOpacity
-            className={`rounded-full py-3 ${
-              isLoading ? 'bg-secondary' : 'bg-secondary'
+            className={`rounded-xl py-3 ${
+              isLoading ? 'bg-gray-300' : 'bg-primary-mid dark:bg-primary-lighter'
             } mt-4`}
             onPress={handleLogin}
             disabled={isLoading}
@@ -209,14 +209,15 @@ export default function LoginScreen() {
             {isLoading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text className="text-white text-center font-semibold">
+              <Text className="text-gray-100 dark:text-black text-center font-semibold">
                 Se connecter
               </Text>
             )}
           </TouchableOpacity>
-
         </View>
+
       </View>
-    </KeyboardAvoidingView>
-  );
+    </ParallaxScrollView>
+  </KeyboardAvoidingView>
+);
 }

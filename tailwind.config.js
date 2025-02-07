@@ -9,39 +9,43 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        abel: ['Abel'], // Font par défaut
-        cabin: ['Cabin'], // Font pour les titres
-        lexend: ['Lexend'], // Font pour le code
-        mulish: ['Mulish'], // Font pour le code
-        nunito: ['Nunito'], // Font pour le code
+        abel: ['Abel'],
+        cabin: ['Cabin'],
+        lexend: ['Lexend'],
+        mulish: ['Mulish'],
+        nunito: ['Nunito'],
+        playfair: ['Playfair'],
+        p: ['Cabin'],
+        h: ['Playfair'],
       },
-      // fontSize: {
-      //   'heading-1': ['32px', { lineHeight: '40px', fontWeight: '700' }],
-      //   'heading-2': ['24px', { lineHeight: '32px', fontWeight: '600' }],
-      //   'heading-3': ['20px', { lineHeight: '28px', fontWeight: '600' }],
-      //   'body': ['16px', { lineHeight: '24px' }],
-      //   'small': ['14px', { lineHeight: '20px' }],
-      // },
+      fontSize: {
+        'h1': ['32px', { lineHeight: '40px', fontWeight: '400' }],
+        'h2': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+        'p': ['16px', { lineHeight: '24px' }],
+        'small': ['14px', { lineHeight: '20px' }],
+      },
       colors: {
         primary: {
-          mid: '',
-          lighter: '',
-          darker: ''
+          mid: '#ebad7f',
+          lighter: '#ffecd4',
+          darker: '#734e32'
         },
         secondary: {
-          mid: '',
-          lighter: '',
-          darker: ''
+          mid: '#6d65ba',
+          lighter: '#c2bdff',
+          darker: '#312c63'
         },
-        white: "#fff",
-        black: "#191919",
-        blackRgb: 'rgb(252, 229, 187)',
+        // white: "#f0f0f0",
+        black: "#333333", //1b1b1b
+        blackRgb: 'rgb(51, 51, 51)',
         gray: {
-          mid: '',
-          lighter: '',
-          darker: ''
+          mid: '#919191',
+          lighter: '#dedede',
+          darker: '#545454'
         },
-        grayRgb: 'rgb(252, 229, 187)'
+        grayRgb: 'rgb(145, 145, 145)',
+        gradientPrimary: ['#dbb68c', '#ffe1bf'],
+        gradientSecondary: ['#6d65ba', '#9b93e6']
       },
     },
   },

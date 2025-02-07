@@ -17,12 +17,13 @@ export default function HomeScreen() {
           colors={['#FCE5BB', '#BD8B9C']}
         />
         <View className='bg-white'>
-          <Text className='font-abel text-[26px] font-normal uppercase'>Lorem ipsum blabla bllalal</Text>
-          <Text className='text-[26px] uppercase'>Lorem ipsum blabla bllalal</Text>
-          <Text className='font-cabin text-[26px] uppercase'>Lorem ipsum blabla bllalal</Text>
-          <Text className='font-lexend text-[26px] uppercase'>Lorem ipsum blabla bllalal</Text>
-          <Text className='font-mulish text-[26px] font-[400] uppercase'>Lorem ipsum blabla bllalal</Text>
-          <Text className='font-nunito text-[26px] font-[400] uppercase'>Lorem ipsum blabla bllalal</Text>
+          <Text className='font-abel text-[26px] font-normal'>Lorem ipsum blabla bllalal</Text>
+          <Text className='text-[26px]'>Lorem ipsum blabla bllalal</Text>
+          <Text className='font-cabin text-[26px]'>Lorem ipsum blabla bllalal</Text>
+          <Text className='font-lexend text-[26px]'>Lorem ipsum blabla bllalal</Text>
+          <Text className='font-mulish text-[26px]'>Lorem ipsum blabla bllalal</Text>
+          <Text className='font-nunito text-[26px]'>Lorem ipsum blabla bllalal</Text>
+          <Text className='font-playfair text-[26px]'>Lorem ipsum blabla bllalal</Text>
         </View>
       </View>
     // </LinearGradient>
