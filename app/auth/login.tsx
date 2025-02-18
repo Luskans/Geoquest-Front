@@ -14,7 +14,7 @@ import { Link, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../hooks/useAuth';
 import ParallaxScrollView from '@/components/common/ParallaxScrollView';
-import colors from "@/constants/colors";
+// import colors from "@/constants/colors";
 
 
 export default function LoginScreen() {
@@ -108,14 +108,15 @@ return (
     className="flex-1"
   >
     <ParallaxScrollView
-      headerImage={require('@/assets/images/test6.png')}
-      headerGradient={{
-        colors: [
-          colors.primary.mid,
-          colors.primary.lighter,
-        ]
-      }}
-      headerText="Connecte toi et cherche les indices !"
+      // headerImage={require('@/assets/images/test6.png')}
+      // headerGradient={{
+      //   colors: [
+      //     colors.primary.mid,
+      //     colors.primary.lighter,
+      //   ]
+      // }}
+      // headerText="Connecte toi et cherche les indices !"
+      headerBackground={require('@/assets/images/background.webp')}
     >
       <View className="flex-1 p-6 justify-center">
 
@@ -209,7 +210,7 @@ return (
             {isLoading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text className="text-gray-100 dark:text-black text-center font-semibold">
+              <Text className="text-gray-100 dark:text-dark text-center font-semibold">
                 Se connecter
               </Text>
             )}

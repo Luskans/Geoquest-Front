@@ -1,9 +1,12 @@
 import { Redirect, Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/hooks/useAuth';
+import colors from "@/constants/colors";
+import { useThemeStore } from '@/stores/useThemeStore';
 
 export default function TabsLayout() {
   const isAuthenticated = useAuth();
+  const { isDark } = useThemeStore();
 
   // Redirection si non authentifié
   if (!isAuthenticated) {
@@ -13,18 +16,19 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: isDark ? colors.primary.mid : colors.primary.darker,
+        tabBarInactiveTintColor: isDark ? colors.gray.mid : colors.gray.mid,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: 'transparent',
+          backgroundColor: isDark ? colors.dark : colors.light,
           shadowColor: 'transparent',
-          borderRadius: 24,
+          // borderRadius: 24,
+          borderColor: isDark ? colors.primary.mid : colors.primary.darker,
           position: 'absolute',
           bottom: -10,
           height: 64,
-          borderLeftWidth: 1,
-          borderRightWidth: 1,
+          // borderLeftWidth: 1,
+          // borderRightWidth: 1,
           elevation: 0, // Supprime l'ombre sur Android
           shadowOpacity: 0, // Supprime l'ombre sur iOS
         },

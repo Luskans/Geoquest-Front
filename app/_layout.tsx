@@ -16,8 +16,10 @@ import colors from "@/constants/colors";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  // Pour le bg
   const theme = useTheme();
   theme.colors.background = 'transparent';
+  // Pour les conditions de colors pour le ark theme
   const { isDark } = useThemeStore();
   const [loaded] = useFonts({
     'Abel': require('../assets/fonts/Abel-Regular.ttf'),
@@ -48,7 +50,7 @@ export default function RootLayout() {
       <LinearGradient
         colors={
         isDark 
-            ? [colors.black, colors.black]
+            ? [colors.dark, colors.dark]
             : ["#fff", "#fff"]
         }
         className="flex-1"

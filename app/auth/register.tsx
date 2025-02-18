@@ -477,7 +477,7 @@ export default function RegisterScreen() {
               {isLoading ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text className="text-gray-100 dark:text-black text-center font-semibold">
+                <Text className="text-light dark:text-dark text-center font-semibold">
                   S'inscrire
                 </Text>
               )}

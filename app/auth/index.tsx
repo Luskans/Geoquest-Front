@@ -17,7 +17,7 @@ export default function AuthScreen() {
               source={require('@/assets/images/logo1.png')}
               className="w-10 h-10"
             />
-            <Text className="text-2xl font-bold text-black dark:text-white">
+            <Text className="text-2xl font-bold text-dark dark:text-light">
               <Text className='text-primary-mid'>QR</Text>iddle
             </Text>
           </View>
@@ -40,7 +40,7 @@ export default function AuthScreen() {
               onPress={() => {/* Handle Google OAuth */}}
             >
               <AntDesign name="google" size={24} color={`${colors.primary.mid}`} />
-              <Text className="ml-2 font-semibold text-black dark:text-white">
+              <Text className="ml-2 font-semibold text-dark dark:text-light">
                 Continuer avec Google
               </Text>
             </TouchableOpacity>
@@ -51,7 +51,7 @@ export default function AuthScreen() {
               onPress={() => {/* Handle Apple OAuth */}}
             >
               <AntDesign name="apple1" size={24} color={`${colors.primary.mid}`} />
-              <Text className="ml-2 font-semibold text-black dark:text-white">
+              <Text className="ml-2 font-semibold text-dark dark:text-light">
                 Continuer avec Apple
               </Text>
             </TouchableOpacity>
@@ -70,7 +70,7 @@ export default function AuthScreen() {
                 asChild
               >
                 <TouchableOpacity className="flex-1 bg-primary-mid dark:bg-primary-lighter rounded-xl py-3">
-                  <Text className="text-center text-white dark:text-black font-semibold">
+                  <Text className="text-center text-light dark:text-dark font-semibold">
                     Inscription
                   </Text>
                 </TouchableOpacity>

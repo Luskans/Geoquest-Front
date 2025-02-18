@@ -12,7 +12,8 @@ export default {
     darker: '#312c63'
   },
   // white: "#ffffff",
-  black: "#333333",
+  light: "#f5f2e9",
+  dark: "#333333",
   blackRgb: 'rgb(51, 51, 51)',
   gray: {
     mid: '#919191',
