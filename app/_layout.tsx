@@ -11,7 +11,6 @@ import { ThemeProvider } from "@/stores/ThemeProvider";
 import { useThemeStore } from "@/stores/useThemeStore";
 import colors from "@/constants/colors";
 
-
 // Maintient le splashscreen visible pendant le chargement
 SplashScreen.preventAutoHideAsync();
 
@@ -60,11 +59,13 @@ export default function RootLayout() {
             screenOptions={{
               headerShown: false,
               contentStyle: { backgroundColor: 'transparent' },
+              animation: 'slide_from_right'
             }}
           >
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="game" options={{ headerShown: false }} />
+            <Stack.Screen name="riddles" options={{ headerShown: false }} />
             <Stack.Screen name="auth" options={{ headerShown: false  }} />
           </Stack>
       </LinearGradient>

@@ -2,9 +2,9 @@ import { useThemeStore } from '@/stores/useThemeStore';
 import { Stack } from 'expo-router';
 import colors from "@/constants/colors";
 
-export default function HomeLayout() {
+export default function RiddlesLayout() {
   const { isDark } = useThemeStore();
-
+  
   return (
     <Stack
       screenOptions={{
@@ -16,23 +16,40 @@ export default function HomeLayout() {
       }}
     >
       <Stack.Screen 
-        name="index" 
+        name="created/index"
         options={{ 
-          title: "Accueil",
-          headerShown: false
-        }} 
+          title: 'Mes créations',
+        }}
       />
       <Stack.Screen 
-        name="notifications" 
+        name="created/[id]/index"
         options={{ 
-          title: "Notifications"
-        }} 
+          title: '',
+        }}
       />
       <Stack.Screen 
-        name="leaderboard" 
+        name="created/[id]/steps/[id]"
         options={{ 
-          title: "Classement"
-        }} 
+          title: '',
+        }}
+      />
+      <Stack.Screen 
+        name="created/[id]/qrcodes/[id]"
+        options={{ 
+          title: '',
+        }}
+      />
+      <Stack.Screen 
+        name="participated/index"
+        options={{ 
+          title: 'Mes participations',
+        }}
+      />
+      <Stack.Screen 
+        name="participated/[id]"
+        options={{ 
+          title: '',
+        }}
       />
     </Stack>
   );

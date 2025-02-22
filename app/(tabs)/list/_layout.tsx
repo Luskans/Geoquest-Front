@@ -2,7 +2,7 @@ import { useThemeStore } from '@/stores/useThemeStore';
 import { Stack } from 'expo-router';
 import colors from "@/constants/colors";
 
-export default function HomeLayout() {
+export default function ListLayout() {
   const { isDark } = useThemeStore();
 
   return (
@@ -16,23 +16,17 @@ export default function HomeLayout() {
       }}
     >
       <Stack.Screen 
-        name="index" 
+        name="index"
         options={{ 
-          title: "Accueil",
-          headerShown: false
-        }} 
+          title: 'Énigmes',
+          headerShown: false 
+        }}
       />
       <Stack.Screen 
-        name="notifications" 
+        name="create"
         options={{ 
-          title: "Notifications"
-        }} 
-      />
-      <Stack.Screen 
-        name="leaderboard" 
-        options={{ 
-          title: "Classement"
-        }} 
+          title: 'Nouvelle énigme',
+        }}
       />
     </Stack>
   );

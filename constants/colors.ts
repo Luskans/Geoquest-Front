@@ -9,7 +9,7 @@ export default {
   secondary: {
     mid: '#e6a87c',
     lighter: '#928cd4',
-    darker: '#312c63'
+    darker: '#4b4494'
   },
   // white: "#ffffff",
   light: "#f5f2e9",

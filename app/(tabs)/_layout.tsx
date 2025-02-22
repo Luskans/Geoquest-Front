@@ -1,5 +1,5 @@
 import { Redirect, Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Entypo, Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/hooks/useAuth';
 import colors from "@/constants/colors";
 import { useThemeStore } from '@/stores/useThemeStore';
@@ -93,11 +93,12 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="create"
+        name="list"
         options={{
-          title: 'Créer',
+          title: 'Énigmes',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle-outline" size={size} color={color} />
+            // <Ionicons name="add-circle-outline" size={size} color={color} />
+            <Entypo name="add-to-list" size={size} color={color} />
           ),
         }}
       />
