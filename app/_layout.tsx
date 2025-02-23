@@ -7,9 +7,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from '@react-navigation/native';
 import { ImageBackground } from 'react-native';
 import { useFonts } from "expo-font";
-import { ThemeProvider } from "@/stores/ThemeProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import { useThemeStore } from "@/stores/useThemeStore";
 import colors from "@/constants/colors";
+import useAuthRedirection from "@/hooks/useAuthRedirection";
 
 // Maintient le splashscreen visible pendant le chargement
 SplashScreen.preventAutoHideAsync();
@@ -18,8 +19,9 @@ export default function RootLayout() {
   // Pour le bg
   const theme = useTheme();
   theme.colors.background = 'transparent';
-  // Pour les conditions de colors pour le ark theme
+  // Pour les conditions de colors pour le dark theme
   const { isDark } = useThemeStore();
+  // Pour le chargement des fonts
   const [loaded] = useFonts({
     'Abel': require('../assets/fonts/Abel-Regular.ttf'),
     'Cabin': require('../assets/fonts/Cabin-Variable.ttf'),
@@ -28,6 +30,8 @@ export default function RootLayout() {
     'Nunito': require('../assets/fonts/Nunito-Variable.ttf'),
     'Playfair': require('../assets/fonts/Playfair-Variable.ttf'),
   });
+  // Pour la redirection
+  useAuthRedirection();
 
   useEffect(() => {
     if (loaded) {
@@ -35,7 +39,7 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
+  if (!loaded ) {
     return null;
   }
 

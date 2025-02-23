@@ -1,9 +1,10 @@
+import { useAuthStore } from '@/stores/useAuthStore';
 import { Redirect } from 'expo-router';
-import { useAuth } from '@/hooks/useAuth';
 
 export default function Index() {
-  // const isAuthenticated = useAuth();
-  const isAuthenticated = true;
+  // const isAuthenticated = false;
+  const { isAuthenticated, isLoading } = useAuthStore();
+  
 
   return <Redirect href={isAuthenticated ? '/(tabs)/home' : '/auth'} />;
 }

@@ -1,17 +1,11 @@
 import { Redirect, Tabs } from 'expo-router';
 import { Entypo, Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/hooks/useAuth';
 import colors from "@/constants/colors";
 import { useThemeStore } from '@/stores/useThemeStore';
 
-export default function TabsLayout() {
-  const isAuthenticated = useAuth();
-  const { isDark } = useThemeStore();
 
-  // Redirection si non authentifié
-  if (!isAuthenticated) {
-    return <Redirect href="/auth/login" />;
-  }
+export default function TabsLayout() {
+  const { isDark } = useThemeStore();
 
   return (
     <Tabs

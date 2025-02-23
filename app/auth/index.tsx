@@ -3,9 +3,12 @@ import { Link } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
 import colors from "@/constants/colors";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 
 export default function AuthScreen() {
+  const setIsAuthenticated = useAuthStore(state => state.setIsAuthenticated);
+
   return (
     <SafeAreaView style={{ flex: 1 }} >
       <View className="flex p-6">
@@ -87,6 +90,17 @@ export default function AuthScreen() {
                   </Text>
                 </TouchableOpacity>
               </Link>
+
+              {/* Button Test */}
+              <TouchableOpacity
+                className="flex-1 bg-white dark:bg-transparent border border-primary-mid dark:border-primary-lighter rounded-xl py-3"
+                onPress={() => setIsAuthenticated(true)}
+              >
+                <Text className="text-center text-primary-mid dark:text-primary-lighter font-semibold">
+                  Test
+                </Text>
+              </TouchableOpacity>
+
             </View>
           </View>
 
