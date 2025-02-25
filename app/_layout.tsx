@@ -58,7 +58,7 @@ export default function RootLayout() {
         }
         className="flex-1"
       >
-          <StatusBar style="auto" backgroundColor="transparent" translucent />
+          {/* <StatusBar style="auto" backgroundColor="transparent" translucent /> */}
           <Stack
             screenOptions={{
               headerShown: false,

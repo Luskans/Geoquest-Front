@@ -11,13 +11,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
+import ParallaxScrollView2 from '@/components/common/ParallaxScrollView2';
 
 
 
 
 export default function HomeScreen() {
 
-  // Exemples de données ppur le leadeboard
+  // Exemples de données pour le leadeboard
   const weeklyData = [
     {
       id: '1',
@@ -113,8 +114,11 @@ export default function HomeScreen() {
 
   
   return (
-    <ParallaxScrollView
-      headerBackground={require('@/assets/images/background.webp')}
+    // <ParallaxScrollView
+    //   headerBackground={require('@/assets/images/background.webp')}
+    // >
+    <ParallaxScrollView2
+      headerImage={require('@/assets/images/background.webp')}
     >
       <View className='p-6 pb-20 bg-transparent gap-12'>
         {/* NOTIFICATIONS */}
@@ -244,6 +248,7 @@ export default function HomeScreen() {
         <Ionicons name="warning-outline" size={24} color="black" />
         <Entypo name="price-ribbon" size={24} color="black" />
       </View>
-    </ParallaxScrollView>
+    </ParallaxScrollView2>
+    // </ParallaxScrollView>
   );
 }

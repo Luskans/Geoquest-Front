@@ -5,7 +5,7 @@ import { View, ScrollView, TouchableOpacity } from 'react-native';
 export default function RiddlesCreatedScreen() {
   return (
     <ScrollView className="flex-1 bg-transparent p-6">
-        {Array.from({ length: 5 }, (_, i) => (
+        {Array.from({ length: 12 }, (_, i) => (
           <Link 
             key={i}
             href={`/riddles/participated/${i}`}

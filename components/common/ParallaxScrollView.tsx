@@ -7,7 +7,7 @@ import Animated, {
   useAnimatedStyle,
   useScrollViewOffset,
 } from 'react-native-reanimated';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight} from '@react-navigation/elements';
 
 const HEADER_HEIGHT = 220;
 
