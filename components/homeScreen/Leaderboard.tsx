@@ -17,32 +17,22 @@ type LeaderboardProps = {
   totalData: LeaderboardData[];
 };
 
-const TabButton = ({ 
-  title, 
-  isActive, 
-  onPress 
-}: { 
-  title: string; 
-  isActive: boolean; 
-  onPress: () => void; 
-}) => (
-    <TouchableOpacity
-        onPress={onPress}
-        className="flex-1 px-4"
-    >
-        <View className="items-center">
-            <Text
-                className={`text-center font-medium py-3 ${
-                    isActive ? "text-secondary-mid dark:text-secondary-lighter" : "text-gray-mid dark:text-gray-400"
-                }`}
-            >
-                {title}
-            </Text>
-            {isActive && (
-                <View className=" w-14 h-0.5 bg-secondary-mid dark:bg-secondary-lighter" />
-            )}
-        </View>
-    </TouchableOpacity>
+const TabButton = ({ title, isActive, onPress }: { title: string; isActive: boolean; onPress: () => void; }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    className="flex-1 px-4"
+  >
+    <View className="items-center">
+      <Text
+        className={`text-center font-medium py-3 ${isActive ? "text-secondary-mid dark:text-secondary-lighter" : "text-gray-mid dark:text-gray-400"}`}
+      >
+        {title}
+      </Text>
+      {isActive && (
+        <View className=" w-14 h-0.5 bg-secondary-mid dark:bg-secondary-lighter" />
+      )}
+    </View>
+  </TouchableOpacity>
 );
 
 const LeaderboardRow = ({ data, index }: { data: LeaderboardData; index: number }) => {
@@ -57,15 +47,13 @@ const LeaderboardRow = ({ data, index }: { data: LeaderboardData; index: number 
     <View className="flex-row items-center py-3">
       {/* Rank */}
       <View className="w-12 items-center">
-        <View 
-          className={`w-8 h-8 rounded-full items-center justify-center ${
-            index < 3 ? rankColors[index] : "bg-gray-100"
-          }`}
-        >
-          <Text 
-            className={`font-bold ${
-              index < 3 ? "text-white" : "text-gray-600"
+        <View
+          className={`w-8 h-8 rounded-full items-center justify-center ${index < 3 ? rankColors[index] : "bg-gray-100"
             }`}
+        >
+          <Text
+            className={`font-bold ${index < 3 ? "text-white" : "text-gray-600"
+              }`}
           >
             {data.rank}
           </Text>
@@ -93,11 +81,7 @@ const LeaderboardRow = ({ data, index }: { data: LeaderboardData; index: number 
   );
 };
 
-export default function Leaderboard({ 
-  weeklyData, 
-  monthlyData, 
-  totalData 
-}: LeaderboardProps) {
+export default function Leaderboard({ weeklyData, monthlyData, totalData}: LeaderboardProps) {
   const [activePeriod, setActivePeriod] = useState<Period>('week');
 
   const getData = () => {

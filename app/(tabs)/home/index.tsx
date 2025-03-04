@@ -1,10 +1,12 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import ParallaxScrollView from '@/components/common/ParallaxScrollView';
-import { Link, router } from 'expo-router';
+import { Link, router, useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
 import SectionLink from '@/components/common/SectionLink';
 import ModuleLink from '@/components/common/ModuleLink';
 import Leaderboard from '@/components/homeScreen/Leaderboard';
 import ActiveGameCard from '@/components/homeScreen/ActiveGameCard';
+import { useHomeStore } from '@/stores/useHomeStore';
 
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -111,6 +113,29 @@ export default function HomeScreen() {
       score: 2120,
     },
   ];
+
+  const {
+    notificationsCount,
+    activeRiddle,
+    participatedCount,
+    createdCount,
+    fetchHomeData,
+    isLoading,
+  } = useHomeStore();
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     fetchHomeData();
+  //   }, [fetchHomeData])
+  // );
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
 
   
   return (
