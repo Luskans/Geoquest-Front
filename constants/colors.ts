@@ -3,24 +3,31 @@
 export default {
   primary: {
     mid: '#ebad7f',
-    lighter: '#ffecd4',
-    darker: '#734e32'
+    lighter: '#cda88e',
+    darker: '#9c5f32'
   },
   secondary: {
     mid: '#e6a87c',
     lighter: '#928cd4',
-    darker: '#4b4494'
+    darker: '#574fab'
   },
-  // white: "#ffffff",
+  white: "#ffffff",
   light: "#f5f2e9",
   dark: "#333333",
-  blackRgb: 'rgb(51, 51, 51)',
   gray: {
-    mid: '#919191',
-    lighter: '#dedede',
-    darker: '#545454'
+    one: '#f3f4f6',
+    two: '#e5e7eb',
+    three: '#d1d5db',
+    four: '#9ca3af',
+    five: '#6b7280',
+    six: '#4b5563',
+    seven: '#374151',
+    height: '#1f2937',
+    nine: '#111827',
+    mid: '#828282',
+    lighter: '#c2c2c2',
+    darker: '#444444'
   },
-  grayRgb: 'rgb(145, 145, 145)',
   gradientPrimary: ['#dbb68c', '#ffe1bf'],
   gradientSecondary: ['#6d65ba', '#9b93e6']
 };

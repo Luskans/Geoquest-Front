@@ -5,18 +5,18 @@ import { useAuthStore } from '@/stores/useAuthStore';
 export default function useAuthRedirection() {
   const segments = useSegments();
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const { user, token, isLoading } = useAuthStore();
 
   useEffect(() => {
     if (isLoading) return;
 
-    const inAuthGroup = segments[0] === 'auth';
+    const inAuthSegment = segments[0] === 'auth';
 
-    if (!isAuthenticated && !inAuthGroup) {
+    if (!(user || token) && !inAuthSegment) {
       router.replace('/auth');
 
-    } else if (isAuthenticated && inAuthGroup) {
+    } else if ((user && token) && inAuthSegment) {
       router.replace('/(tabs)/home');
     }
-  }, [isAuthenticated, segments, isLoading]);
+  }, [user, token, segments, isLoading]);
 }

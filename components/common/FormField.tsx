@@ -21,17 +21,18 @@ export function FormField({ name, label, isPassword = false, onChangeText, ...pr
   };
 
   return (
-    <View className="mb-4">
-      <Text className="text-gray-700 mb-2">{label}</Text>
+    <View className="">
+      <Text className="text-dark dark:text-light mb-2">{label}</Text>
       <View className="relative">
         <TextInput
           className={`bg-gray-50 border rounded-lg p-3 ${
-            meta.touched && meta.error ? 'border-red-500' : 'border-gray-300'
+            meta.touched && meta.error ? 'border-red-500 dark:border-red-400' : 'border-gray-300'
           } ${isPassword ? 'pr-12' : ''}`}
           onChangeText={handleChangeText}
           onBlur={field.onBlur(name)}
           value={field.value}
           secureTextEntry={isPassword && !showPassword}
+          autoCapitalize='none'
           {...props}
         />
         {isPassword && (
@@ -48,7 +49,7 @@ export function FormField({ name, label, isPassword = false, onChangeText, ...pr
         )}
       </View>
       {meta.touched && meta.error && (
-        <Text className="text-red-500 text-sm mt-1">{meta.error}</Text>
+        <Text className="text-red-500 dark:text-red-400 text-sm mt-1">{meta.error}</Text>
       )}
     </View>
   );

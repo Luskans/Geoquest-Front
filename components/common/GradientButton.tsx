@@ -5,28 +5,28 @@ import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 interface GradientButtonProps {
   onPress: () => void;
   title: string;
-  colors?: any;
+  colors: [string, string];
+  textColor: string;
   isLoading?: boolean;
-  isDisabled?: boolean;
+  disabled?: boolean;
 }
 
 function GradientButton({
   onPress,
   title,
   colors,
+  textColor,
   isLoading = false,
-  isDisabled = false,
+  disabled = false,
 }: GradientButtonProps) {
-
-  const disabled = isLoading || isDisabled;
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      disabled={disabled}
-      className="overflow-hidden mt-8"
+      disabled={isLoading || disabled}
+      className="overflow-hidden"
       accessibilityRole="button"
-      accessibilityState={{ disabled: isDisabled }}
+      accessibilityState={{ disabled: disabled }}
     >
       <LinearGradient
         colors={colors}
@@ -38,7 +38,7 @@ function GradientButton({
         {isLoading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text className={`text-white font-semibold`} numberOfLines={1}>
+          <Text className={`${textColor} font-semibold`} numberOfLines={1}>
             {title}
           </Text>
         )}

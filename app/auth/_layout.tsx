@@ -1,26 +1,17 @@
-import { useThemeStore } from '@/stores/useThemeStore';
 import { useTheme } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 
 export default function AuthLayout() {
   const theme = useTheme();
-  const { isDark } = useThemeStore();
   theme.colors.background = 'transparent';
 
   return (
-    
     <Stack
       screenOptions={{
-        contentStyle: { backgroundColor: 'transparent' },
-        headerTransparent: true,
-        headerBlurEffect: undefined,
-        headerStyle: {
-          backgroundColor: 'transparent',
-        },
         headerShadowVisible: false,
-        headerTintColor: `${isDark ? 'white' : 'black'}`
+        // animation: 'slide_from_right'
       }}
-    >      
+    >     
       <Stack.Screen 
         name="index" 
         options={{ 
@@ -32,12 +23,14 @@ export default function AuthLayout() {
         name="login" 
         options={{ 
           title: 'Connexion',
+          headerTransparent: true,
         }} 
       />
       <Stack.Screen 
         name="register" 
         options={{ 
           title: 'Inscription',
+          headerTransparent: true,
         }} 
       />
       <Stack.Screen 

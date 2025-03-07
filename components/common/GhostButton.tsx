@@ -3,6 +3,8 @@ import { TouchableOpacity, Text, ActivityIndicator, View } from 'react-native';
 interface GhostButtonProps {
   onPress: () => void;
   title: string;
+  color: string;
+  textColor: string;
   isLoading?: boolean;
   disabled?: boolean;
 }
@@ -10,6 +12,8 @@ interface GhostButtonProps {
 export default function GhostButton({
   onPress,
   title,
+  color,
+  textColor,
   isLoading = false,
   disabled = false,
 }: GhostButtonProps) {
@@ -19,12 +23,14 @@ export default function GhostButton({
       onPress={onPress}
       disabled={isLoading || disabled}
       className="overflow-hidden"
+      accessibilityRole="button"
+      accessibilityState={{ disabled: disabled }}
     >
-      <View className={`px-6 py-3 w-full items-center justify-center bg-secondary-darker dark:bg-secondary-lighter rounded-lg ${disabled ? 'opacity-50' : ''}`} >
+      <View className={`px-6 py-3 w-full items-center justify-center bg-transparent border ${color} rounded-lg ${disabled ? 'opacity-50' : ''}`} >
         {isLoading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text className={`text-light dark:text-dark font-semibold`}>
+          <Text className={`${textColor} font-semibold`}>
             {title}
           </Text>
         )}

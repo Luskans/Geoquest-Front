@@ -1,10 +1,9 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import ParallaxScrollView from '@/components/common/ParallaxScrollView';
 import { Link, router, useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import SectionLink from '@/components/common/SectionLink';
 import ModuleLink from '@/components/common/ModuleLink';
-import Leaderboard from '@/components/homeScreen/Leaderboard';
+import Leaderboard from '@/components/leaderboard/Leaderboard';
 import ActiveGameCard from '@/components/homeScreen/ActiveGameCard';
 import { useHomeStore } from '@/stores/useHomeStore';
 
@@ -13,121 +12,29 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
-import ParallaxScrollView2 from '@/components/common/ParallaxScrollView2';
-
-
+import PrimaryLayout from '@/components/layouts/PrimaryLayout';
+import colors from '@/constants/colors';
+import { useThemeStore } from '@/stores/useThemeStore';
 
 
 export default function HomeScreen() {
-
-  // Exemples de données pour le leadeboard
-  const weeklyData = [
-    {
-      id: '1',
-      rank: 1,
-      username: 'John Doe',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 1250,
-    },
-    {
-      id: '2',
-      rank: 2,
-      username: 'Hasan',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 1240,
-    },
-    {
-      id: '3',
-      rank: 3,
-      username: 'Jeremy',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 1230,
-    },
-    {
-      id: '4',
-      rank: 4,
-      username: 'Sylvain sdjuhnsquhjn sujhdiuhsq hsqj hqj sqoijhd',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 1220,
-    },
-  ];
-
-  const monthlyData = [
-    {
-      id: '1',
-      rank: 1,
-      username: 'John Doe',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 1850,
-    },
-    {
-      id: '2',
-      rank: 2,
-      username: 'Hasan',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 1840,
-    },
-    {
-      id: '3',
-      rank: 3,
-      username: 'Jeremy',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 1830,
-    },
-    {
-      id: '4',
-      rank: 4,
-      username: 'Sylvain',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 1820,
-    },
-  ];
-
-  const totalData = [
-    {
-      id: '1',
-      rank: 1,
-      username: 'John Doe',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 2150,
-    },
-    {
-      id: '2',
-      rank: 2,
-      username: 'Hasan',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 2140,
-    },
-    {
-      id: '3',
-      rank: 3,
-      username: 'Jeremy',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 2130,
-    },
-    {
-      id: '4',
-      rank: 4,
-      username: 'Sylvain',
-      profilePic: 'https://example.com/pic1.jpg',
-      score: 2120,
-    },
-  ];
-
+  const { isDark } = useThemeStore();
   const {
     notificationsCount,
     activeRiddle,
     participatedCount,
     createdCount,
+    ranking,
+    userRank,
     fetchHomeData,
     isLoading,
   } = useHomeStore();
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     fetchHomeData();
-  //   }, [fetchHomeData])
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      fetchHomeData({ limit: 5 });
+    }, [fetchHomeData])
+  );
 
   if (isLoading) {
     return (
@@ -139,100 +46,67 @@ export default function HomeScreen() {
 
   
   return (
-    // <ParallaxScrollView
-    //   headerBackground={require('@/assets/images/background.webp')}
-    // >
-    <ParallaxScrollView2
-      headerImage={require('@/assets/images/background.webp')}
-    >
-      <View className='p-6 pb-20 bg-transparent gap-12'>
+    <PrimaryLayout>
+      <View className='py-20 gap-12'>
         {/* NOTIFICATIONS */}
-        <View className='flex gap-2'>
+        <View className='flex gap-2 px-6'>
           <Link href="/home/notifications" asChild>
-            <TouchableOpacity>
+            <TouchableOpacity className='flex-row items-center gap-3'>
+              <Ionicons name="notifications-outline" size={22} color={isDark ? colors.light : colors.dark} />
               <SectionLink title="Notifications" />
             </TouchableOpacity>
           </Link>
-          <Text className='dark:text-light text-lg'>Vous avez x notifications en attente.</Text>
+          <Text className='dark:text-light text-lg'>
+            Vous avez
+            <Text className='text-secondary-darker dark:text-secondary-lighter font-semibold'> {notificationsCount} </Text>
+            {notificationsCount > 1 ? 'notifications': 'notification'} en attente.</Text>
         </View>
 
         {/* CURRENT RIDDLE */}
-        <ActiveGameCard activeGame="" />
-
-        <View className='flex-col gap-6'>
-          {/* RIDDLES PARTICIPATED */}
-          {/* <Link href="/(tabs)/riddle/participated" replace asChild>
-            <TouchableOpacity>
-              <ModuleLink title="Enigmes participées" number={18} />
-            </TouchableOpacity>
-          </Link> */}
-          {/* <TouchableOpacity
-            onPress={() => {
-              router.push({
-                pathname: "/(tabs)/riddle/participated",
-                params: {}
-              });
-            }}
-          >
-            <ModuleLink title="Enigmes participées" number={18} />
-          </TouchableOpacity> */}
-          <TouchableOpacity
-            onPress={() => router.push("/riddles/participated")}
-          >
-            <ModuleLink title="Enigmes participées" number={18} />
-          </TouchableOpacity>
-          {/* <Link href="/(tabs)/riddle?initialRoute=participated" asChild >
-            <TouchableOpacity>
-              <ModuleLink title="Enigmes participées" number={18} />
-            </TouchableOpacity>
-          </Link> */}
-
-          {/* RIDDLES CREATED */}
-          {/* <Link href="/(tabs)/riddle/created" replace asChild>
-            <TouchableOpacity>
-              <ModuleLink title="Enigmes créées" number={7} />
-            </TouchableOpacity>
-          </Link> */}
-          {/* <TouchableOpacity
-            onPress={() => {
-              router.push({
-                pathname: "/(tabs)/riddle/created",
-                params: {}
-              });
-            }}
-          >
-            <ModuleLink title="Enigmes créées" number={7} />
-          </TouchableOpacity> */}
-          <TouchableOpacity
-            onPress={() => router.push("/riddles/created")}
-          >
-            <ModuleLink title="Enigmes créées" number={7} />
-          </TouchableOpacity>
-          {/* <Link href="/(tabs)/riddle?initialRoute=created" asChild >
-            <TouchableOpacity>
-              <ModuleLink title="Enigmes créées" number={7} />
-            </TouchableOpacity>
-          </Link> */}
+        <View className='bg-gray-100 dark:bg-gray-darker px-6 -mb-12'>
+          <ActiveGameCard activeGame="" />
         </View>
 
+        <View className='bg-gray-100 dark:bg-gray-darker h-2'></View>
+        
+        <View className='flex-col gap-10 px-6'>
+          {/* RIDDLES PARTICIPATED */}
+          <Link href="/riddles/participated" asChild>
+            <TouchableOpacity className='flex-row items-center gap-3'>
+              <Ionicons name="footsteps-outline" size={22} color={isDark ? colors.light : colors.dark} />
+              <ModuleLink title="Enigmes participées" number={participatedCount} />
+            </TouchableOpacity>
+          </Link>
+
+          {/* RIDDLES CREATED */}
+          <Link href="/riddles/created" asChild>
+            <TouchableOpacity className='flex-row items-center gap-3'>
+              <Ionicons name="footsteps-outline" size={22} color={isDark ? colors.light : colors.dark} />
+              <ModuleLink title="Enigmes créées" number={createdCount} />
+            </TouchableOpacity>
+          </Link>
+        </View>
+        <View className='bg-gray-100 dark:bg-gray-darker h-2'></View>
+
         {/* LEADERBOARD */}
-        <View className='flex gap-2'>
+        <View className='flex gap-2 px-6'>
           <Link href="/home/leaderboard" asChild>
-            <TouchableOpacity>
+            <TouchableOpacity className='flex-row items-center gap-3'>
+              <Ionicons name="trophy-outline" size={22} color={isDark ? colors.light : colors.dark} />
               <SectionLink title="Classement" />
             </TouchableOpacity>
           </Link>
+          
           <Leaderboard
-            weeklyData={weeklyData}
-            monthlyData={monthlyData}
-            totalData={totalData}
+            ranking={ranking}
+            userRank={userRank}
           />
         </View>
 
         <Text>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is
-           that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing
+            that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing
             packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.
-             Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</Text>
+              Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</Text>
         
         <Ionicons name="footsteps-outline" size={24} color="black" />
         <Ionicons name="qr-code-outline" size={24} color="black" />
@@ -273,7 +147,6 @@ export default function HomeScreen() {
         <Ionicons name="warning-outline" size={24} color="black" />
         <Entypo name="price-ribbon" size={24} color="black" />
       </View>
-    </ParallaxScrollView2>
-    // </ParallaxScrollView>
+    </PrimaryLayout>
   );
 }

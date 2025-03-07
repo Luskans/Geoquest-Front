@@ -1,53 +1,69 @@
-import RiddleCreatedLink from '@/components/common/RiddleCreatedLink';
 import { Link, useFocusEffect } from 'expo-router';
-import { View, ScrollView, TouchableOpacity, ActivityIndicator, FlatList, Text } from 'react-native';
+import { View, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { useCallback } from 'react';
-import { useCreatedRiddlesStore, Riddle } from '@/stores/useCreatedRiddlesStore';
+import SecondaryLayoutWithoutScrollView from '@/components/layouts/SecondaryLayoutWithoutScrollView';
+import CreatedListCard from '@/components/list/CreatedListCard';
+import { useCreatedRiddleStore } from '@/stores/useCreatedRiddleStore';
 
 export default function RiddlesCreatedScreen() {
-  const { riddles, fetchRiddles, isLoading } = useCreatedRiddlesStore();
+  const {
+    offset,
+    hasMore,
+    riddles,
+    fetchRiddleData,
+    resetRiddles,
+    isLoading,
+    error
+  } = useCreatedRiddleStore();
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     fetchRiddles();
-  //   }, [fetchRiddles])
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      resetRiddles();
+      fetchRiddleData({ limit: 20, offset: 0 });
+    }, [fetchRiddleData, resetRiddles])
+  );
 
-  if (isLoading) {
+  const handleLoadMore = async () => {
+    if (!isLoading && hasMore) {
+      await fetchRiddleData({ limit: 20, offset });
+    }
+  };
+
+  const renderItem = ({ item }: { item: any }) => (
+    <>
+      <Link href={`/riddles/created/${item.id}`} className='py-6' asChild>
+        <TouchableOpacity className=''>
+          <CreatedListCard riddle={item} />
+        </TouchableOpacity>
+      </Link>
+      <View className='bg-gray-100 dark:bg-gray-darker h-2'></View>
+    </>
+  );
+
+  if (isLoading && offset === 0) {
     return (
-      <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#2563EB" />
       </View>
     );
   }
 
   return (
-    <ScrollView className="flex-1 bg-transparent p-6">
-        {Array.from({ length: 12 }, (_, i) => (
-          <Link 
-            key={i}
-            href={`/riddles/participated/${i}`}
-            asChild
-          >
-            <TouchableOpacity>
-              <RiddleCreatedLink riddle="" />
-            </TouchableOpacity>
-          </Link>
-        ))}
-    </ScrollView>
+    <SecondaryLayoutWithoutScrollView>
+      <View className='flex-1 py-10 gap-6'>
+        <FlatList
+          data={riddles}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            isLoading ? (
+              <ActivityIndicator size="large" color="#2563EB" className='mt-4' />
+            ) : null
+          }
+        />
+      </View>
+    </SecondaryLayoutWithoutScrollView>
   );
-  // return (
-  //   <View style={{ flex: 1, padding: 16 }}>
-  //     <FlatList
-  //       data={riddles}
-  //       keyExtractor={(item: Riddle) => item.id.toString()}
-  //       renderItem={({ item }: { item: Riddle }) => (
-  //         <View style={{ paddingVertical: 12, borderBottomWidth: 1, borderColor: '#ccc' }}>
-  //           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
-  //           <Text>{item.description}</Text>
-  //         </View>
-  //       )}
-  //     />
-  //   </View>
-  // );
 }

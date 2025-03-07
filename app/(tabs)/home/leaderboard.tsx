@@ -1,20 +1,46 @@
-import Leaderboard from '@/components/homeScreen/Leaderboard';
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import Leaderboard from '@/components/leaderboard/Leaderboard';
+import { View, ActivityIndicator } from 'react-native';
 import { useLeaderboardStore } from '@/stores/useLeaderboardStore';
-import React, { useCallback, useEffect, useState } from 'react';
-
+import React, { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import SecondaryLayoutWithoutScrollView from '@/components/layouts/SecondaryLayoutWithoutScrollView';
 
 
 export default function LeaderboardScreen() {
-  const [activePeriod, setActivePeriod] = useState<Period>('week');
-  const [offset, setOffset] = useState<number>(0);
-  const { ranking, fetchLeaderboardData, isLoading } = useLeaderboardStore();
-  const limit = 20; // par exemple, on charge 20 éléments par page
+  const { ranking, userRank, offset, fetchLeaderboardData, isLoading, error, resetLeaderboardData } = useLeaderboardStore();
+
+  useFocusEffect(
+    useCallback(() => {
+      resetLeaderboardData();
+      fetchLeaderboardData({ limit: 20, offset: 0 });
+    }, [fetchLeaderboardData, resetLeaderboardData])
+  );
+
+  const handleLoadMore = async () => {
+    if (!isLoading) {
+      await fetchLeaderboardData({ limit: 20, offset });
+    }
+  };
+
+  if (isLoading && offset === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
 
   return (
-    <View>
-      <Text>Page de leaderboard</Text>
-      <Leaderboard />
-    </View>
+    <SecondaryLayoutWithoutScrollView>
+      <View className='flex-1 pb-20 px-6'>
+        <Leaderboard
+          ranking={ranking}
+          userRank={userRank}
+          infiniteScroll={true}
+          onLoadMore={handleLoadMore}
+          isLoadingMore={isLoading}
+        />
+      </View>
+    </SecondaryLayoutWithoutScrollView>
   );
 }

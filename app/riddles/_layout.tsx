@@ -6,12 +6,18 @@ export default function RiddlesLayout() {
   const { isDark } = useThemeStore();
   
   return (
+    // <Stack
+    //   screenOptions={{
+    //     contentStyle: { backgroundColor: 'transparent' },
+    //     headerStyle: { backgroundColor: 'transparent' },
+    //     headerShadowVisible: false,
+    //     headerTintColor: isDark ? colors.light : colors.dark,
+    //     animation: 'slide_from_right'
+    //   }}
+    // >
     <Stack
       screenOptions={{
-        contentStyle: { backgroundColor: 'transparent' },
-        headerStyle: { backgroundColor: 'transparent' },
         headerShadowVisible: false,
-        headerTintColor: isDark ? colors.light : colors.dark,
         animation: 'slide_from_right'
       }}
     >

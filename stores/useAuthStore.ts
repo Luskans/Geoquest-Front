@@ -52,59 +52,57 @@ import { create } from 'zustand';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 interface User {
   id: number;
-  username: string;
+  name: string;
   email: string;
   email_verified_at: string | null;
-  description: string | null;
-  image: string | null;
+  image: string;
 }
 
 interface AuthState {
   user: User | null;
   token: string | null;
   isLoading: boolean;
-  isAuthenticated: boolean;
+  error: string | null;
+  setError: (error: string | null) => void;
+  setFakeAuth: any;
+  initialize: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string, password_confirmation: string) => Promise<void>;
   logout: () => Promise<void>;
   // checkEmailVerification: () => Promise<void>;
-  setIsAuthenticated: (value: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   token: null,
-  isLoading: true,
-  isAuthenticated: false,
-
-  setIsAuthenticated: (value: any) => {
-    set({isAuthenticated: value}),
-    set({isLoading: false})
-  },
+  isLoading: false,
+  error: null,
   
+  setError: (error: string | null) => set({ error }),
+
+  setFakeAuth: async (user: User, token: string) => {
+    set({user, token});
+  },
+
   initialize: async () => {
+    set({ isLoading: true });
+
     try {
       const token = await SecureStore.getItemAsync('token');
 
       if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         
-        // Récupère les informations de l'utilisateur
-        const response = await axios.get(apiUrl + '/user');
+        const response = await axios.get(API_URL + '/user');
         
         set({
           user: response.data,
           token,
-          isAuthenticated: true,
-          isLoading: false,
         });
-
-      } else {
-        set({ isLoading: false });
       }
 
     } catch (error) {
@@ -113,73 +111,88 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ 
         user: null, 
         token: null, 
-        isAuthenticated: false, 
-        isLoading: false 
       });
+
+    } finally {
+      set({ isLoading: false });
     }
   },
 
   login: async (email: string, password: string) => {
+    set({ isLoading: true, error: null });
+
     try {
-      const response = await axios.post(apiUrl + '/login', { email, password });
+      const response = await axios.post(API_URL + '/login', { email, password });
       const { user, token } = response.data;
 
       await SecureStore.setItemAsync('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-      set({ 
-        user,
-        token,
-        isAuthenticated: true
-      });
+      set({ user, token, error: null });
 
     } catch (error) {
-      throw error;
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          set({ error: error.response.data.message || 'Erreur lors de la connexion' });
+
+        } else {
+          set({ error: 'Aucune réponse du serveur' });
+        }
+
+      } else {
+        set({ error: 'Erreur inconnue' });
+      }
+      console.error('Erreur lors de la connexion :', error);
+
+    } finally {
+      set({ isLoading: false });
     }
   },
 
   register: async (username: string, email: string, password: string, password_confirmation: string) => {
+    set({ isLoading: true, error: null });
+
     try {
-      const response = await axios.post(apiUrl + '/register', {
+      const response = await axios.post(API_URL + '/register', {
         username,
         email,
         password,
         password_confirmation,
       });
-
       const { user, token } = response.data;
 
       await SecureStore.setItemAsync('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-      set({ 
-        user,
-        token,
-        isAuthenticated: true, 
-      });
+      set({ user, token, error: null });
 
     } catch (error) {
-      throw error;
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          set({ error: error.response.data.message || "Erreur lors de l'inscription" });
+
+        } else {
+          set({ error: "Aucune réponse du serveur" });
+        }
+        
+      } else {
+        set({ error: "Erreur inconnue" });
+      }
+      console.error("Erreur lors de l'inscription :", error);
+
+    } finally {
+      set({ isLoading: false });
     }
   },
 
   logout: async () => {
+    set({ isLoading: true });
+
     try {
-      // const { token } = get();
-
-      // await axios.post(apiUrl + '/logout', {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`,
-      //   }
-      // });
-
-      await axios.post(apiUrl + '/logout');
-
-      
+      await axios.post(API_URL + '/logout');
 
     } catch (error) {
-      throw error;
+      console.error("Erreur lors de la déconnexion :", error);
 
     } finally {
       await SecureStore.deleteItemAsync('token');
@@ -188,7 +201,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ 
         user: null,
         token: null,
-        isAuthenticated: false, 
+        isLoading: false,
+        error: null
       });
     }
   },

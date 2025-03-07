@@ -27,24 +27,22 @@ module.exports = {
       colors: {
         primary: {
           mid: '#ebad7f',
-          lighter: '#ffecd4',
-          darker: '#734e32'
+          lighter: '#cda88e',
+          darker: '#9c5f32' //#7e5226
         },
         secondary: {
           mid: '#6d65ba',
           lighter: '#c2bdff',
-          darker: '#4b4494'
+          darker: '#574fab'
         },
-        // white: "#f0f0f0",
+        white: "#ffffff",
         light: "#f5f2e9",
         dark: "#333333", //1b1b1b
-        blackRgb: 'rgb(51, 51, 51)',
         gray: {
-          mid: '#919191',
-          lighter: '#dedede',
-          darker: '#545454'
+          mid: '#828282',
+          lighter: '#c2c2c2',
+          darker: '#444444'
         },
-        grayRgb: 'rgb(145, 145, 145)',
         gradientPrimary: ['#dbb68c', '#ffe1bf'],
         gradientSecondary: ['#6d65ba', '#9b93e6']
       },

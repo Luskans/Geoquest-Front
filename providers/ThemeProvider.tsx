@@ -16,7 +16,7 @@ export const ThemeProvider = ({ children }: Props) => {
   }, [isDark]);
 
   return (
-    <View className={`flex-1 ${isDark ? 'dark' : ''}`}>
+    <View className={`flex-1 ${isDark ? 'dark' : ''} dark:bg-dark bg-light`}>
       {children}
     </View>
   );

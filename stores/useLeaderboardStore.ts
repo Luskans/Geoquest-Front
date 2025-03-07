@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 interface Ranking {
-  username: string;
+  name: string;
   image: string;
   score: number;
 }
@@ -13,13 +13,6 @@ interface UserRank {
   score: number;
   rank: number;
 }
-
-// interface PlayerRank {
-//   username: string;
-//   image: string;
-//   score: number;
-//   rank: number;
-// }
 
 interface LeaderboardState {
   ranking: {
@@ -32,45 +25,55 @@ interface LeaderboardState {
     month: UserRank | null;
     all: UserRank | null;
   }
-  lastFetched: { [key: string]: number };
+  offset : number;
   isLoading: boolean;
-  fetchLeaderboardData: (params: { period: 'week' | 'month' | 'all'; limit?: number; offset?: number; }) => Promise<void>;
+  error: string | null;
+  fetchLeaderboardData: (params: { limit?: number; offset?: number; }) => Promise<void>;
+  resetLeaderboardData: () => void;
+
 }
 
 export const useLeaderboardStore = create<LeaderboardState>((set, get) => ({
   ranking: { week: [], month: [], all: [] },
   userRank: { week: null, month: null, all: null },
-  lastFetched: {},
+  offset: 0,
   isLoading: false,
+  error: null,
 
-  fetchLeaderboardData: async ({ period, limit, offset = 0 }) => {
-    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes en millisecondes
-    const now = Date.now();
-
-    const lastFetched = get().lastFetched[period];
-    if (lastFetched !== null && (now - lastFetched < CACHE_DURATION)) {
-      return;
-    }
-
-    set({ isLoading: true });
+  fetchLeaderboardData: async ({ limit = 20, offset = 0 }) => {
+    set({ isLoading: true, error: null });
 
     try {
-      const response = await axios.get(apiUrl + '/leaderboard', {
-        params: { period, limit, offset }
+      const response = await axios.get(API_URL + '/leaderboard', {
+        params: { limit, offset }
       });
       const data = response.data;
 
       set((state) => ({
-        ranking: { ...state.ranking, [period]: data.ranking },
-        userRank: { ...state.userRank, [period]: data.userRank },
-        lastFetched: { ...state.lastFetched, [period]: now },
+        ranking: {
+          week: [...state.ranking.week, ...data.ranking.week],
+          month: [...state.ranking.month, ...data.ranking.month],
+          all: [...state.ranking.all, ...data.ranking.all]
+        },
+        userRank: data.userRank,
+        offset: offset + limit
       }));
 
     } catch (error) {
-      console.error('Erreur lors du fetch des données du classement:', error);
+      console.error('Erreur lors du fetch des données Leaderboard:', error);
+      console.error('Erreur lors du fetch des données Leaderboard2:', error.message);
+      console.error('Erreur lors du fetch des données Leaderboard3:', error.response.data.message);
+      set({ error: 'Erreur lors du chargement de home' });
 
     } finally {
       set({ isLoading: false });
     }
+  },
+
+  resetLeaderboardData: () => {
+    set({
+      ranking: { week: [], month: [], all: [] },
+      offset: 0,
+    });
   },
 }));
