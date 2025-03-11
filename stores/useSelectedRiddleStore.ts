@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const CACHE_DURATION = Number(process.env.EXPO_PUBLIC_CACHE_DURATION);
 
 interface Riddle {
   id: number;
@@ -11,39 +12,41 @@ interface Riddle {
   created_at: string;
 }
 
-interface CreatedRiddleState {
-  riddles: Riddle[];
-  offset: number;
-  hasMore: boolean;
+interface SelectedRiddleState {
+  riddle: Riddle | null;
   isLoading: boolean;
+  lastFetched: number | null;
   error: string | null;
-  fetchRiddlesData: (params: { limit?: number; offset?: number; }) => Promise<void>;
-  resetRiddles: () => void;
+  fetchRiddleData: (params: { id: string }) => Promise<void>;
 }
 
-export const useCreatedRiddleStore = create<CreatedRiddleState>((set, get) => ({
-  riddles: [],
-  offset: 0,
-  hasMore: true,
+export const useSelectedRiddleStore = create<SelectedRiddleState>((set, get) => ({
+  riddle: null,
   isLoading: false,
+  lastFetched: null,
   error: null,
 
-  fetchRiddlesData: async ({ limit = 20, offset = 0 }) => {
-    if (!get().hasMore) return;
+  setError: (error: string | null) => set({ error }),
+
+  fetchRiddleData: async (id) => {
+    const now = Date.now();
+    const lastFetched = get().lastFetched;
+    if (lastFetched !== null && (now - lastFetched < CACHE_DURATION)) {
+      return;
+    }
 
     set({ isLoading: true, error: null });
 
     try {
       const response = await axios.get(`${API_URL}/riddles/created/list`, {
-        params: { limit, offset }
+        params: { id }
       });
       const data = response.data;
 
-      set((state) => ({
-        riddles: [...state.riddles, ...data.riddles],
-        offset: offset + limit,
-        hasMore: data.riddles.length === limit,
-      }));
+      set({
+        riddle: data.riddle,
+        lastFetched: now,
+      });
 
     } catch (error) {
       console.error('Erreur lors du fetch des données created:', error);
@@ -55,6 +58,4 @@ export const useCreatedRiddleStore = create<CreatedRiddleState>((set, get) => ({
       set({ isLoading: false });
     }
   },
-
-  resetRiddles: () => set({ riddles: [], offset: 0, hasMore: true })
 }));

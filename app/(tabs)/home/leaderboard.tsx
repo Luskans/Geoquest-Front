@@ -1,7 +1,7 @@
 import Leaderboard from '@/components/leaderboard/Leaderboard';
 import { View, ActivityIndicator } from 'react-native';
 import { useLeaderboardStore } from '@/stores/useLeaderboardStore';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import SecondaryLayoutWithoutScrollView from '@/components/layouts/SecondaryLayoutWithoutScrollView';
 

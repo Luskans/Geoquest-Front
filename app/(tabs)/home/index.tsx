@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Link, router, useFocusEffect } from 'expo-router';
+import { Link, useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import SectionLink from '@/components/common/SectionLink';
 import ModuleLink from '@/components/common/ModuleLink';
@@ -43,7 +43,6 @@ export default function HomeScreen() {
       </View>
     );
   }
-
   
   return (
     <PrimaryLayout>

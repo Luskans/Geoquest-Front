@@ -10,7 +10,7 @@ export default function RiddlesCreatedScreen() {
     offset,
     hasMore,
     riddles,
-    fetchRiddleData,
+    fetchRiddlesData,
     resetRiddles,
     isLoading,
     error
@@ -19,13 +19,13 @@ export default function RiddlesCreatedScreen() {
   useFocusEffect(
     useCallback(() => {
       resetRiddles();
-      fetchRiddleData({ limit: 20, offset: 0 });
-    }, [fetchRiddleData, resetRiddles])
+      fetchRiddlesData({ limit: 20, offset: 0 });
+    }, [fetchRiddlesData, resetRiddles])
   );
 
   const handleLoadMore = async () => {
     if (!isLoading && hasMore) {
-      await fetchRiddleData({ limit: 20, offset });
+      await fetchRiddlesData({ limit: 20, offset });
     }
   };
 

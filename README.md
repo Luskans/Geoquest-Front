@@ -12,6 +12,13 @@
     npx expo start
    ```
 
+## Get started
+
+ip parent: 192.168.1.16
+ip appart:
+ip bureau: 192.168.1.56
+ou sinon: 81.250.185.176
+
 ## A modifier
 
 - les couleurs dans tailwind.config.js mais aussi dans constants/colors
