@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
-const CACHE_DURATION = Number(process.env.EXPO_PUBLIC_CACHE_DURATION);
 
 interface Riddle {
   id: number;
@@ -15,7 +14,6 @@ interface Riddle {
 interface SelectedRiddleState {
   riddle: Riddle | null;
   isLoading: boolean;
-  lastFetched: number | null;
   error: string | null;
   fetchRiddleData: (params: { id: string }) => Promise<void>;
 }
@@ -23,36 +21,27 @@ interface SelectedRiddleState {
 export const useSelectedRiddleStore = create<SelectedRiddleState>((set, get) => ({
   riddle: null,
   isLoading: false,
-  lastFetched: null,
   error: null,
 
   setError: (error: string | null) => set({ error }),
 
-  fetchRiddleData: async (id) => {
-    const now = Date.now();
-    const lastFetched = get().lastFetched;
-    if (lastFetched !== null && (now - lastFetched < CACHE_DURATION)) {
-      return;
-    }
+  fetchRiddleData: async ({ id }) => {
 
     set({ isLoading: true, error: null });
 
     try {
-      const response = await axios.get(`${API_URL}/riddles/created/list`, {
-        params: { id }
-      });
+      const response = await axios.get(`${API_URL}/riddles/${id}`);
       const data = response.data;
 
       set({
         riddle: data.riddle,
-        lastFetched: now,
       });
 
     } catch (error) {
-      console.error('Erreur lors du fetch des données created:', error);
-      console.error('Erreur lors du fetch des données created2:', error.message);
-      console.error('Erreur lors du fetch des données created3:', error.response.data.message);
-      set({ error: 'Erreur lors du chargement de created' });
+      console.error('Erreur lors du fetch des données selected:', error);
+      console.error('Erreur lors du fetch des données selected2:', error.message);
+      console.error('Erreur lors du fetch des données selected3:', error.response.data.message);
+      set({ error: 'Erreur lors du chargement de selected' });
 
     } finally {
       set({ isLoading: false });

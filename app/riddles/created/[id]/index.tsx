@@ -6,17 +6,13 @@ import { useSelectedRiddleStore } from '@/stores/useSelectedRiddleStore';
 
 export default function RiddleDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const {
-    riddle,
-    fetchRiddleData,
-    isLoading,
-    error
-  } = useSelectedRiddleStore();
+  console.log("Valeur de l'ID :", id);
+  const { riddle, fetchRiddleData, isLoading, error } = useSelectedRiddleStore();
 
   useFocusEffect(
     useCallback(() => {
-      fetchRiddleData({ id: id });
-    }, [fetchRiddleData])
+      fetchRiddleData({ id });
+    }, [fetchRiddleData, id])
   );
 
   if (isLoading) {
@@ -32,6 +28,17 @@ export default function RiddleDetailScreen() {
       <SecondaryLayoutWithoutScrollView>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>{error}</Text>
+        </View>
+      </SecondaryLayoutWithoutScrollView>
+    );
+  }
+
+  if (!riddle) {
+    return (
+      <SecondaryLayoutWithoutScrollView>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Aucune donnée pour cet énigme</Text>
+          <Text>{id}</Text>
         </View>
       </SecondaryLayoutWithoutScrollView>
     );

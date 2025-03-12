@@ -34,7 +34,7 @@ export default function LoginScreen() {
       className="flex-1"
     >
       <PrimaryLayout>
-        <View className="flex-1 p-6 justify-center">
+        <View className="flex-1 px-6 justify-center pt-20">
           <Formik
             initialValues={{ email: '', password: '' }}
             validationSchema={loginSchema}
