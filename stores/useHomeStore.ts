@@ -16,7 +16,7 @@ interface UserRank {
   rank: number;
 }
 
-interface HomeState {
+export interface HomeState {
   notificationsCount: number;
   activeRiddle: any;
   participatedCount: number;

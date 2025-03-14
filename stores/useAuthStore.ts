@@ -54,7 +54,7 @@ import axios from 'axios';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-interface User {
+export interface User {
   id: number;
   name: string;
   email: string;

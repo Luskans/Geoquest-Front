@@ -3,18 +3,18 @@ import axios from 'axios';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-interface Ranking {
+export interface Ranking {
   name: string;
   image: string;
   score: number;
 }
 
-interface UserRank {
+export interface UserRank {
   score: number;
   rank: number;
 }
 
-interface LeaderboardState {
+export interface LeaderboardState {
   ranking: {
     week: Ranking[];
     month: Ranking[];

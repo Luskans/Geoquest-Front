@@ -145,6 +145,17 @@ export default function HomeScreen() {
         <Ionicons name="trash-outline" size={24} color="black" />
         <Ionicons name="warning-outline" size={24} color="black" />
         <Entypo name="price-ribbon" size={24} color="black" />
+        <Ionicons name="happy-outline" size={24} color="black" />
+        <Ionicons name="heart-circle-outline" size={24} color="black" />
+        <Ionicons name="heart-outline" size={24} color="black" />
+        <Ionicons name="people-outline" size={24} color="black" />
+        <Ionicons name="star-outline" size={24} color="black" />
+        <Ionicons name="thumbs-up-outline" size={24} color="black" />
+        <Ionicons name="chatbubble-ellipses-outline" size={24} color="black" />
+        <Ionicons name="information-circle-outline" size={24} color="black" />
+        <Text>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is
+        that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is
+        that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here.</Text>
       </View>
     </PrimaryLayout>
   );

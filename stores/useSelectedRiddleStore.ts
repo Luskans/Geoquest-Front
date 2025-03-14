@@ -3,15 +3,63 @@ import axios from 'axios';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-interface Riddle {
+export interface GameSession {
+  id: number;
+  player_id: number;
+  riddle_id: number;
+  score: number;
+  status: 'active' | 'completed' | 'abandoned';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Review {
+  id: number;
+  user_id: number;
+  riddle_id: number;
+  content: string;
+  rating: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Hint {
+  id: number;
+  order_number: number;
+  type: 'text' | 'image' | 'audio';
+  content: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Step {
+  id: number;
+  order_number: number;
+  qr_code: string;
+  latitude: string;
+  longitude: string;
+  created_at: string;
+  updated_at: string;
+  hints: Hint[];
+}
+
+export interface Riddle {
   id: number;
   title: string;
+  description: string;
   is_private: boolean;
   status: 'active' | 'draft' | 'disabled';
   created_at: string;
+  updated_at: string;
+  difficulty: number;
+  latitude: string;
+  longitude: string;
+  game_sessions: GameSession[];
+  reviews: Review[];
+  steps: Step[];
 }
 
-interface SelectedRiddleState {
+export interface SelectedRiddleState {
   riddle: Riddle | null;
   isLoading: boolean;
   error: string | null;
