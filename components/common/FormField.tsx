@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface FormFieldProps extends TextInputProps {
   name: string;
-  label: string;
+  label?: string;
   isPassword?: boolean;
 }
 
@@ -22,7 +22,9 @@ export function FormField({ name, label, isPassword = false, onChangeText, ...pr
 
   return (
     <View className="">
-      <Text className="text-dark dark:text-light mb-2">{label}</Text>
+      {label && (
+        <Text className="text-dark dark:text-light mb-2">{label}</Text>
+      )}
       <View className="relative">
         <TextInput
           className={`bg-gray-50 border rounded-lg p-3 ${

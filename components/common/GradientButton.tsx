@@ -24,7 +24,7 @@ function GradientButton({
     <TouchableOpacity
       onPress={onPress}
       disabled={isLoading || disabled}
-      className="overflow-hidden"
+      className="overflow-hidden flex-1"
       accessibilityRole="button"
       accessibilityState={{ disabled: disabled }}
     >

@@ -3,6 +3,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useThemeStore } from '@/stores/useThemeStore';
 import colors from "@/constants/colors";
 import moment from "moment";
+import { getStatusColor } from '@/lib/getStatusColor';
 
 interface CreatedListCardProps {
     riddle: any;
@@ -10,15 +11,6 @@ interface CreatedListCardProps {
 
 export default function CreatedListCard({ riddle }: CreatedListCardProps) {
     const { isDark } = useThemeStore();
-  
-    const getStatusColor = (status: string) => {
-      switch (status) {
-        case "active": return 'bg-secondary-darker text-light dark:bg-secondary-lighter dark:text-dark';
-        case "draft": return 'bg-gray-300 text-dark dark:bg-gray-300 dark:text-dark';
-        case "disabled": return 'bg-red-200 text-dark dark:bg-red-300 dark:text-dark';
-        default: return 'bg-gray-300 text-dark';
-      }
-    };
 
     return (
       <View className='flex-1 flex-row justify-between items-center px-6 gap-8'>

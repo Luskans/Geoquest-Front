@@ -25,7 +25,7 @@ export default function SecondaryLayout({ children }: Props) {
     <View className='flex-1'>
       <StatusBar style={ isDark ? 'dark' : 'light' } backgroundColor='transparent' />
       
-      <ScrollView className='flex-1 bg-white dark:bg-dark pt-8 px-6'>
+      <ScrollView className='flex-1 bg-white dark:bg-dark'>
         {children}
       </ScrollView>
     </View>

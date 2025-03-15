@@ -42,9 +42,9 @@ export default function ActiveGameCard({ activeGame }: ActiveGameCardProps) {
         </View>
         <Text className='text-secondary-darker dark:text-secondary-lighter text-lg'>4/8</Text>
       </View>
-      <View className='flex-row items-center justify-center gap-6'>
+      <View className='flex-row items-center gap-6'>
         <GhostButton title="Reprendre" color={isDark ? 'border-secondary-lighter' : 'border-secondary-darker'} textColor={isDark ? 'text-secondary-lighter' : 'text-secondary-darker'} onPress={() => router.push(`/game/${activeGame.id}/play`)} />
-        <Text className='text-dark dark:text-light underline'>Abandonner</Text>
+        <Text className='px-6 py-3 justify-center text-dark dark:text-light underline'>Abandonner</Text>
       </View>
     </View>
   );

@@ -15,9 +15,12 @@
 ## Get started
 
 ip parent: 192.168.1.16
-ip appart:
+ip appart: 91.167.162.60
 ip bureau: 192.168.1.56
 ou sinon: 81.250.185.176
+
+ip pc perso : 192.168.1.70
+ip pc pro : 
 
 ## A modifier
 

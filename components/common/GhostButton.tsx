@@ -22,11 +22,11 @@ export default function GhostButton({
     <TouchableOpacity
       onPress={onPress}
       disabled={isLoading || disabled}
-      className="overflow-hidden"
+      className="overflow-hidden flex-1"
       accessibilityRole="button"
       accessibilityState={{ disabled: disabled }}
     >
-      <View className={`px-6 py-3 w-full items-center justify-center bg-transparent border ${color} rounded-lg ${disabled ? 'opacity-50' : ''}`} >
+      <View className={`px-6 py-3 items-center justify-center bg-transparent border ${color} rounded-lg ${disabled ? 'opacity-50' : ''}`} >
         {isLoading ? (
           <ActivityIndicator color="white" />
         ) : (
