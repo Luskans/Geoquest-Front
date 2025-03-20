@@ -9,9 +9,9 @@ import MapView, { MapPressEvent, Marker } from 'react-native-maps';
 import GradientButton from '@/components/common/GradientButton';
 import { useThemeStore } from '@/stores/useThemeStore';
 import colors from '@/constants/colors';
+import { DESCRIPTION_MAX_LENGTH } from '@/constants/constants';
 
 
-const DESCRIPTION_MAX_LENGTH = 300;
 
 export default function CreateScreen() {
   const { isDark } = useThemeStore();
