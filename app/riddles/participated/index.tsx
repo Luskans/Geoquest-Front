@@ -4,7 +4,7 @@ import { View, ScrollView, TouchableOpacity, FlatList, Text, ActivityIndicator }
 import { useCallback } from 'react';
 import SecondaryLayoutWithoutScrollView from '@/components/layouts/SecondaryLayoutWithoutScrollView';
 
-export default function RiddlesParticipatedScreen() {
+export default function ParticipatedListScreen() {
 
   return (
     <SecondaryLayoutWithoutScrollView>

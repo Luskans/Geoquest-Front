@@ -3,9 +3,9 @@ import { View, ActivityIndicator, FlatList, TouchableOpacity } from 'react-nativ
 import { useCallback } from 'react';
 import SecondaryLayoutWithoutScrollView from '@/components/layouts/SecondaryLayoutWithoutScrollView';
 import CreatedListCard from '@/components/list/CreatedListCard';
-import { useCreatedRiddleStore } from '@/stores/useCreatedRiddleStore';
+import { useCreatedListStore } from '@/stores/useCreatedListStore';
 
-export default function RiddlesCreatedScreen() {
+export default function CreatedListScreen() {
   const {
     offset,
     hasMore,
@@ -14,7 +14,7 @@ export default function RiddlesCreatedScreen() {
     resetRiddles,
     isLoading,
     error
-  } = useCreatedRiddleStore();
+  } = useCreatedListStore();
 
   useFocusEffect(
     useCallback(() => {

@@ -15,9 +15,6 @@ import { DESCRIPTION_MAX_LENGTH } from '@/constants/constants';
 
 export default function CreateScreen() {
   const { isDark } = useThemeStore();
-  const [descriptionLength, setDescriptionLength] = useState(0);
-  // const [mapCoordinate, setMapCoordinate] = useState({ latitude: 45.041446, longitude: 3.883930 });
-  // Par défaut, on affiche la carte centrée sur une position par défaut
   const [mapCoordinate, setMapCoordinate] = useState({
     latitude: 45.041446,
     longitude: 3.883930,
@@ -25,7 +22,6 @@ export default function CreateScreen() {
     longitudeDelta: 0.0421,
   });
 
-  // Handler pour la sélection de l'emplacement sur la carte
   const onMapPress = (e: MapPressEvent) => {
     const { latitude, longitude } = e.nativeEvent.coordinate;
     setMapCoordinate((prev) => ({
@@ -84,7 +80,6 @@ export default function CreateScreen() {
                     />
                   )}
                 </View>
-
 
                 {/* Titre */}
                 <View className='px-6'>

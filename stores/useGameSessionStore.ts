@@ -33,7 +33,7 @@ export interface GameSession {
   sessionSteps: SessionStep[];
 }
 
-interface ActiveRiddleState {
+interface GameSessionState {
   gameSession: GameSession | null;
   isLoading: boolean;
   error: string | null;
@@ -41,7 +41,7 @@ interface ActiveRiddleState {
 }
 
 // TODO : ne pas passer le user id en param, le récupérer côté back
-export const useActiveRiddleStore = create<ActiveRiddleState>((set) => ({
+export const useGameSessionStore = create<GameSessionState>((set) => ({
   gameSession: null,
   isLoading: false,
   error: null,

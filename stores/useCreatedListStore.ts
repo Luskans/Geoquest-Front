@@ -11,7 +11,7 @@ interface Riddle {
   created_at: string;
 }
 
-interface CreatedRiddleState {
+interface CreatedListState {
   riddles: Riddle[];
   offset: number;
   hasMore: boolean;
@@ -21,7 +21,7 @@ interface CreatedRiddleState {
   resetRiddles: () => void;
 }
 
-export const useCreatedRiddleStore = create<CreatedRiddleState>((set, get) => ({
+export const useCreatedListStore = create<CreatedListState>((set, get) => ({
   riddles: [],
   offset: 0,
   hasMore: true,
