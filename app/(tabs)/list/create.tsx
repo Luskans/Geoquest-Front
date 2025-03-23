@@ -11,7 +11,15 @@ import { useThemeStore } from '@/stores/useThemeStore';
 import colors from '@/constants/colors';
 import { DESCRIPTION_MAX_LENGTH } from '@/constants/constants';
 
-
+interface CreateValues {
+  title: string;
+  description: string;
+  is_private: boolean;
+  password: string;
+  difficulty: number;
+  latitude: string;
+  longitude: string;
+}
 
 export default function CreateScreen() {
   const { isDark } = useThemeStore();
@@ -29,6 +37,10 @@ export default function CreateScreen() {
       latitude,
       longitude,
     }));
+  };
+
+  const handleSubmit = async (values: CreateValues) => {
+    await login(values.email, values.password);
   };
 
   return (

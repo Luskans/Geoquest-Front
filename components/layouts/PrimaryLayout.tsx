@@ -4,8 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import colors from '@/constants/colors';
 import { useThemeStore } from '@/stores/useThemeStore';
 import Constants from 'expo-constants';
+import { HEADER_HEIGHT } from '@/constants/constants';
 
-const HEADER_HEIGHT = 220;
 const statusBarHeight = Constants.statusBarHeight;
 
 type Props = {
