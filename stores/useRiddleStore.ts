@@ -5,27 +5,30 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export interface RiddleList {
   id: number;
+  creator_id: number;
   title: string;
   is_private: boolean;
-  difficulty: number;
+  status: 'active' | 'draft' | 'disabled';
   latitude: string;
   longitude: string;
+  created_at: string;
+  difficulty: number;
   rating: number;
   stepCount: number;
 }
 
 export interface RiddleDetail {
   id: number;
+  creator_id: number;
   title: string;
   description: string;
   is_private: boolean;
   password: string | null;
   status: 'active' | 'draft' | 'disabled';
-  created_at: string;
-  updated_at: string;
-  difficulty: number;
   latitude: string;
   longitude: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface DraftCreate {
@@ -33,7 +36,7 @@ export interface DraftCreate {
   description: string;
   is_private: boolean;
   password: string | null;
-  difficulty: number;
+  status: 'active' | 'draft' | 'disabled';
   latitude: string;
   longitude: string;
 }
@@ -128,11 +131,11 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
     try {
       const response = await axios.get(`${API_URL}/riddles/${id}`);
       const data = response.data;
-      // Si l'API renvoie directement l'objet riddle ou s'il est encapsulé dans data.riddle
+
       set((state) => ({
         riddleDetail: {
           ...state.riddleDetail,
-          riddle: data.riddle || data,
+          riddle: data.riddle,
         },
       }));
 
@@ -162,6 +165,7 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
         params: { limit, offset },
       });
       const data = response.data;
+
       set((state) => ({
         createdList: {
           ...state.createdList,
@@ -185,7 +189,6 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
       }));
     }
   },
-
 
   createRiddle: async (data: DraftCreate) => {
     try {

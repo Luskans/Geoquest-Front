@@ -1,9 +1,8 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
 import colors from "@/constants/colors";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAuthStore } from '@/stores/useAuthStore';
 import { StatusBar } from 'expo-status-bar';
 import { useThemeStore } from '@/stores/useThemeStore';
 import GradientButton from '@/components/common/GradientButton';
@@ -11,7 +10,6 @@ import GhostButton from '@/components/common/GhostButton';
 
 
 export default function AuthScreen() {
-  const { setFakeAuth } = useAuthStore();
   const { isDark } = useThemeStore();
 
   return (
@@ -109,16 +107,6 @@ export default function AuthScreen() {
                 color={isDark ? 'border-primary-lighter' : 'border-primary-darker'}
                 textColor={isDark ? 'text-primary-lighter' : 'text-primary-darker'}
               />
-
-              {/* Button Test */}
-              <TouchableOpacity
-                className="flex-1 bg-white dark:bg-transparent border border-primary-mid dark:border-primary-lighter rounded-xl py-3"
-                onPress={() => setFakeAuth({id: 1, username: 'test', email: 'test@email.com', image: 'path/to/image.webp'}, 'token')}
-              >
-                <Text className="text-center text-primary-mid dark:text-primary-lighter font-semibold">
-                  Test
-                </Text>
-              </TouchableOpacity>
 
             </View>
           </View>

@@ -68,7 +68,6 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   setError: (error: string | null) => void;
-  setFakeAuth: any;
   initialize: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string, password_confirmation: string) => Promise<void>;
@@ -83,10 +82,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   error: null,
   
   setError: (error: string | null) => set({ error }),
-
-  setFakeAuth: async (user: User, token: string) => {
-    set({user, token});
-  },
 
   initialize: async () => {
     set({ isLoading: true });

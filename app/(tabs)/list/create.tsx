@@ -1,5 +1,5 @@
 import SecondaryLayout from '@/components/layouts/SecondaryLayout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import Slider from '@react-native-community/slider';
@@ -10,25 +10,52 @@ import GradientButton from '@/components/common/GradientButton';
 import { useThemeStore } from '@/stores/useThemeStore';
 import colors from '@/constants/colors';
 import { DESCRIPTION_MAX_LENGTH } from '@/constants/constants';
+import { useAutoSaveForm, loadFormState, clearFormState } from '@/hooks/useAutoSaveForm';
+import { DraftCreate } from '@/stores/useRiddleStore';
 
-interface CreateValues {
-  title: string;
-  description: string;
-  is_private: boolean;
-  password: string;
-  difficulty: number;
-  latitude: string;
-  longitude: string;
-}
+const STORAGE_KEY = 'createRiddleFormState';
 
 export default function CreateScreen() {
   const { isDark } = useThemeStore();
+  const [initialValues, setInitialValues] = useState({
+    title: '',
+    description: '',
+    is_private: false,
+    password: '',
+    status: 'draft',
+    latitude: '37.78825',
+    longitude: '-122.4324',
+  });
   const [mapCoordinate, setMapCoordinate] = useState({
     latitude: 45.041446,
     longitude: 3.883930,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
+
+  useEffect(() => {
+    (async () => {
+      const savedState = await loadFormState(STORAGE_KEY);
+      if (savedState) {
+        setInitialValues(savedState);
+      }
+    })();
+  }, []);
+
+  const handleAutoSave = (values: any) => {
+    // On sauvegarde aussi les coordonnées à partir de la carte
+    const stateToSave = {
+      ...values,
+      latitude: String(mapCoordinate.latitude),
+      longitude: String(mapCoordinate.longitude),
+    };
+    // Le hook se déclenche grâce à useAutoSaveForm dans le useEffect (ci-dessous)
+    return stateToSave;
+  };
+
+  // Utilisation du hook pour sauvegarder automatiquement
+  // On observe la dépendance sur initialValues ici dans Formik :
+  useAutoSaveForm(initialValues, STORAGE_KEY);
 
   const onMapPress = (e: MapPressEvent) => {
     const { latitude, longitude } = e.nativeEvent.coordinate;
@@ -39,8 +66,12 @@ export default function CreateScreen() {
     }));
   };
 
-  const handleSubmit = async (values: CreateValues) => {
-    await login(values.email, values.password);
+  const handleSubmit = async (values: DraftCreate) => {
+    // Ici votre code de soumission. Ex : appel de service API, etc.
+    console.log('Form submitted', values);
+    
+    // En cas de succès, on efface l'état sauvegardé
+    await clearFormState(STORAGE_KEY);
   };
 
   return (
@@ -51,20 +82,10 @@ export default function CreateScreen() {
       <SecondaryLayout>
         <View className='py-10'>
           <Formik
-            initialValues={{
-              title: '',
-              description: '',
-              is_private: false,
-              password: '',
-              difficulty: 3,
-              latitude: String(mapCoordinate.latitude),
-              longitude: String(mapCoordinate.longitude),
-            }}
+            initialValues={initialValues}
+            enableReinitialize
             validationSchema={riddleSchema}
-            onSubmit={(values) => {
-              // Ici, tu gères la soumission du formulaire (appel de service API, etc.)
-              console.log('Form submitted', values);
-            }}
+            onSubmit={handleSubmit}
           >
             {({ handleSubmit, values, setFieldValue, isValid, isSubmitting }) => (
               <View className="gap-8">
@@ -121,7 +142,7 @@ export default function CreateScreen() {
                 </View>
 
                 {/* Difficulté */}
-                <View className='px-6 gap-4'>
+                {/* <View className='px-6 gap-4'>
                   <View className='flex-row gap-3'>
                     <Text className="text-dark dark:text-light">Difficulté :</Text>
                     <Text className="text-secondary-darker dark:text-secondary-lighter font-semibold">{values.difficulty}</Text>
@@ -136,7 +157,7 @@ export default function CreateScreen() {
                     maximumTrackTintColor={isDark ? colors.gray.four : colors.gray.five}
                     thumbTintColor={isDark ? colors.secondary.lighter : colors.secondary.darker}
                   />
-                </View>
+                </View> */}
 
                 {/* Carte */}
                 <View className='gap-2'>

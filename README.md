@@ -16,11 +16,9 @@
 
 ip parent: 192.168.1.16
 ip appart: 91.167.162.60
-ip bureau: 192.168.1.56
-ou sinon: 81.250.185.176
-
+ip bureau: 81.250.185.176
 ip pc perso : 192.168.1.70
-ip pc pro : 
+ip pc pro : 192.168.1.56
 
 ## A modifier
 
