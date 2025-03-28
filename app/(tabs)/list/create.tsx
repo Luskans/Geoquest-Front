@@ -11,27 +11,30 @@ import { useThemeStore } from '@/stores/useThemeStore';
 import colors from '@/constants/colors';
 import { DESCRIPTION_MAX_LENGTH } from '@/constants/constants';
 import { useAutoSaveForm, loadFormState, clearFormState } from '@/hooks/useAutoSaveForm';
-import { DraftCreate } from '@/stores/useRiddleStore';
+import { DraftCreate, useRiddleStore } from '@/stores/useRiddleStore';
 
-const STORAGE_KEY = 'createRiddleFormState';
+const STORAGE_KEY = 'createRiddle';
 
 export default function CreateScreen() {
   const { isDark } = useThemeStore();
+  const { draftCreate, createRiddle } = useRiddleStore();
   const [initialValues, setInitialValues] = useState({
     title: '',
     description: '',
     is_private: false,
     password: '',
-    status: 'draft',
-    latitude: '37.78825',
-    longitude: '-122.4324',
+    status: 'draft' as 'draft',
+    // latitude: 45.041446,
+    // longitude: 3.883930,
+    // latitudeDelta: 0.0922,
+    // longitudeDelta: 0.0421,
   });
-  const [mapCoordinate, setMapCoordinate] = useState({
-    latitude: 45.041446,
-    longitude: 3.883930,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
+  // const [mapCoordinate, setMapCoordinate] = useState({
+  //   latitude: 45.041446,
+  //   longitude: 3.883930,
+  //   latitudeDelta: 0.0922,
+  //   longitudeDelta: 0.0421,
+  // });
 
   useEffect(() => {
     (async () => {
@@ -42,38 +45,49 @@ export default function CreateScreen() {
     })();
   }, []);
 
-  const handleAutoSave = (values: any) => {
-    // On sauvegarde aussi les coordonnées à partir de la carte
-    const stateToSave = {
-      ...values,
-      latitude: String(mapCoordinate.latitude),
-      longitude: String(mapCoordinate.longitude),
-    };
-    // Le hook se déclenche grâce à useAutoSaveForm dans le useEffect (ci-dessous)
-    return stateToSave;
-  };
+  // const handleAutoSave = (values: any) => {
+  //   // On sauvegarde aussi les coordonnées à partir de la carte
+  //   return {
+  //     ...values,
+  //     latitude: String(mapCoordinate.latitude),
+  //     longitude: String(mapCoordinate.longitude),
+  //   };
+  // };
 
   // Utilisation du hook pour sauvegarder automatiquement
-  // On observe la dépendance sur initialValues ici dans Formik :
+  // useAutoSaveForm(initialValues, STORAGE_KEY, handleAutoSave);
   useAutoSaveForm(initialValues, STORAGE_KEY);
 
   const onMapPress = (e: MapPressEvent) => {
     const { latitude, longitude } = e.nativeEvent.coordinate;
-    setMapCoordinate((prev) => ({
+    // setMapCoordinate((prev) => ({
+    //   ...prev,
+    //   latitude,
+    //   longitude,
+    // }));
+    setInitialValues((prev) => ({
       ...prev,
       latitude,
       longitude,
     }));
+    console.log(initialValues)
   };
 
   const handleSubmit = async (values: DraftCreate) => {
     // Ici votre code de soumission. Ex : appel de service API, etc.
+    const data: DraftCreate = {
+      ...values,
+      latitude: String(initialValues.latitude), // ou String(mapCoordinate.latitude)
+      longitude: String(initialValues.longitude), // ou String(mapCoordinate.longitude)
+    };
+    await createRiddle(values);
     console.log('Form submitted', values);
     
     // En cas de succès, on efface l'état sauvegardé
     await clearFormState(STORAGE_KEY);
   };
 
+  console.log(initialValues)
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -89,6 +103,13 @@ export default function CreateScreen() {
           >
             {({ handleSubmit, values, setFieldValue, isValid, isSubmitting }) => (
               <View className="gap-8">
+                {/* {draftCreate.error && (
+                  <View className="p-4 rounded-lg mb-8 bg-red-50 border dark:border-red-400 border-red-500">
+                    <Text className="text-red-400 text-center">
+                      {draftCreate.error}
+                    </Text>
+                  </View>
+                )} */}
 
                 {/* Privée ou publique */}
                 <View className="px-6 flex-1 gap-3">
@@ -110,6 +131,7 @@ export default function CreateScreen() {
                       name="password"
                       placeholder="Entrez un mot de passe"
                       isPassword
+                      // value={values.password}
                     />
                   )}
                 </View>
@@ -120,20 +142,24 @@ export default function CreateScreen() {
                     name="title"
                     label="Titre"
                     placeholder="Entrez le titre de votre énigme"
+                    // onChangeText={(text: string) => setFieldValue('title', text)}
+                    // value={values.title}
                   />
                 </View>      
 
                 {/* Description */}
                 <View className='px-6'>
-                  <Text className="text-dark dark:text-light mb-2">Description</Text>
-                  <TextInput
+                  {/* <Text className="text-dark dark:text-light mb-2">Description</Text> */}
+                  <FormField
+                    name="description"
+                    label="Description"
                     className="bg-gray-50 border border-gray-300 rounded-lg p-3"
                     multiline
                     numberOfLines={10}
                     maxLength={DESCRIPTION_MAX_LENGTH}
                     placeholder="Décrivez votre énigme..."
-                    onChangeText={(text: string) => setFieldValue('description', text)}
-                    value={values.description}
+                    // onChangeText={(text: string) => setFieldValue('description', text)}
+                    // value={values.description}
                     style={{ height: 150, textAlignVertical: 'top' }}
                   />
                   <Text className="text-gray-500 dark:text-gray-400 text-sm mt-1 text-right">
@@ -165,10 +191,12 @@ export default function CreateScreen() {
                   <View className="h-64 overflow-hidden mb-6">
                     <MapView
                       style={{ flex: 1 }}
-                      initialRegion={mapCoordinate}
+                      // initialRegion={mapCoordinate}
+                      initialRegion={{latitude: initialValues.latitude, longitude: initialValues.longitude, latitudeDelta: initialValues.latitudeDelta, longitudeDelta: initialValues.longitudeDelta}}
                       onPress={onMapPress}
                     >
-                      <Marker coordinate={{ latitude: mapCoordinate.latitude, longitude: mapCoordinate.longitude }} />
+                      {/* <Marker coordinate={{ latitude: mapCoordinate.latitude, longitude: mapCoordinate.longitude }} /> */}
+                      <Marker coordinate={{ latitude: initialValues.latitude, longitude: initialValues.longitude }} />
                     </MapView>
                   </View>
                 </View>
@@ -187,7 +215,7 @@ export default function CreateScreen() {
                 <View className='px-6'>
                   <GradientButton
                     onPress={() => handleSubmit()}
-                    title="Créer le brouillon"
+                    title="Créer"
                     colors={isDark ? [colors.primary.mid, colors.primary.lighter] : [colors.primary.darker, colors.primary.mid]}
                     textColor={isDark ? 'text-dark' : 'text-light'}
                     isLoading={isSubmitting}

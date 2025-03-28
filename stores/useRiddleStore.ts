@@ -59,7 +59,11 @@ export interface RiddleState {
     isLoading: boolean;
     error: string | null;
   }
-  draftCreate: DraftCreate | null;
+  draftCreate: {
+    // riddle: DraftCreate | null;
+    isLoading: boolean;
+    error: string | null;
+  }
   fetchRiddleList: (params?: { limit?: number; offset?: number; }) => Promise<void>;
   fetchRiddleDetail: (id: string) => Promise<void>;
   fetchCreatedList: (params?: { limit?: number; offset?: number }) => Promise<void>;
@@ -86,7 +90,11 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
     isLoading: false,
     error: null,
   },
-  draftCreate: null,
+  draftCreate: {
+    // riddle: null,
+    isLoading: false,
+    error: null,
+  },
 
   fetchRiddleList: async ({ limit = 20, offset = 0 } = {}) => {
     set((state) => ({
@@ -191,23 +199,40 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
   },
 
   createRiddle: async (data: DraftCreate) => {
+    set((state) => ({
+      draftCreate: { ...state.draftCreate, isLoading: true, error: null },
+    }));
+
     try {
       const response = await axios.post(`${API_URL}/riddles`, data);
-      set((state) => ({
-        createdList: {
-          ...state.createdList,
-          riddles: [response.data, ...state.createdList.riddles],
-        },
-      }));
+
+      // set((state) => ({
+      //   draftCreate: {
+      //     ...state.draftCreate,
+      //     riddle: response.data,
+      //   },
+      // }));
 
     } catch (error: any) {
       console.error('Erreur lors de la création de l\'énigme:', error);
+      set((state) => ({
+        draftCreate: {
+          ...state.draftCreate,
+          error: error.response?.data?.message || 'Erreur lors du chargement de la liste des énigmes',
+        },
+      }));
+
+    } finally {
+      set((state) => ({
+        draftCreate: { ...state.draftCreate, isLoading: false },
+      }));
     }
   },
 
   updateRiddle: async (id: string, data: Partial<DraftCreate>) => {
     try {
       const response = await axios.put(`${API_URL}/riddles/${id}`, data);
+
       set((state) => ({
         createdList: {
           ...state.createdList,

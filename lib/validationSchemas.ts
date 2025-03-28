@@ -36,13 +36,16 @@ export const riddleSchema = Yup.object().shape({
     .required('La description est requise.')
     .max(MAX_DESCRIPTION_LENGTH, `La description ne doit pas dépasser ${MAX_DESCRIPTION_LENGTH} caractères.`),
   is_private: Yup.boolean().required('Indiquez si l’énigme est privée.'),
-  password: Yup.string().when('is_private', {
-    // @ts-ignore
-    is: true,
-    then: Yup.string().required('Le mot de passe est requis pour une énigme privée.'),
-    otherwise: Yup.string().notRequired(),
+  // password: Yup.string().when('is_private', {
+  //   // @ts-ignore
+  //   is: true,
+  //   then: Yup.string().required('Le mot de passe est requis pour une énigme privée.'),
+  //   otherwise: Yup.string().notRequired(),
+  // }),
+  password: Yup.string().when('is_private', (is_private, schema) => {
+    return Boolean(is_private) ? schema.required('Le mot de passe est requis pour une énigme privée.') : schema.notRequired();
   }),
-  difficulty: Yup.number().min(1).max(5).required('La difficulté est requise.'),
-  latitude: Yup.number().required('La latitude est requise.'),
-  longitude: Yup.number().required('La longitude est requise.'),
+  // latitude: Yup.string().required('La latitude est requise.'),
+  // longitude: Yup.string().required('La longitude est requise.'),
+  status: Yup.string().oneOf(['draft', 'active', 'disabled']).required("Le status est requis"),
 });
