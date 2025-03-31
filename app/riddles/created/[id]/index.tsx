@@ -13,7 +13,7 @@ import SecondaryLayout from '@/components/layouts/SecondaryLayout';
 import GradientButton from '@/components/common/GradientButton';
 import GhostButton from '@/components/common/GhostButton';
 
-export default function RiddleDetailScreen() {
+export default function CreatedDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { riddle, fetchRiddleData, isLoading, error } = useSelectedRiddleStore();
   const { isDark } = useThemeStore();
@@ -50,7 +50,6 @@ export default function RiddleDetailScreen() {
       <SecondaryLayoutWithoutScrollView>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Aucune donnée pour cet énigme</Text>
-          <Text>{id}</Text>
         </View>
       </SecondaryLayoutWithoutScrollView>
     );

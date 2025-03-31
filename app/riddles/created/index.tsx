@@ -1,33 +1,24 @@
 import { Link, useFocusEffect } from 'expo-router';
-import { View, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { View, ActivityIndicator, FlatList, TouchableOpacity, Text } from 'react-native';
 import { useCallback } from 'react';
 import SecondaryLayoutWithoutScrollView from '@/components/layouts/SecondaryLayoutWithoutScrollView';
 import CreatedListCard from '@/components/list/CreatedListCard';
-import { useCreatedListStore } from '@/stores/useCreatedListStore';
+import { useRiddleStore } from '@/stores/useRiddleStore';
 
 export default function CreatedListScreen() {
-  const {
-    offset,
-    hasMore,
-    riddles,
-    fetchRiddlesData,
-    resetRiddles,
-    isLoading,
-    error
-  } = useCreatedListStore();
+  const { createdList, fetchCreatedList } = useRiddleStore();
 
   useFocusEffect(
     useCallback(() => {
-      resetRiddles();
-      fetchRiddlesData({ limit: 20, offset: 0 });
-    }, [fetchRiddlesData, resetRiddles])
+      fetchCreatedList({ limit: 20, offset: 0 });
+    }, [fetchCreatedList])
   );
 
-  const handleLoadMore = async () => {
-    if (!isLoading && hasMore) {
-      await fetchRiddlesData({ limit: 20, offset });
-    }
-  };
+  // const handleLoadMore = async () => {
+  //   if (!isLoading && hasMore) {
+  //     await fetchRiddlesData({ limit: 20, offset });
+  //   }
+  // };
 
   const renderItem = ({ item }: { item: any }) => (
     <>
@@ -40,11 +31,23 @@ export default function CreatedListScreen() {
     </>
   );
 
-  if (isLoading && offset === 0) {
+  if (createdList.isLoading && createdList.offset === 0) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#2563EB" />
-      </View>
+      <SecondaryLayoutWithoutScrollView>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color="#2563EB" />
+        </View>
+      </SecondaryLayoutWithoutScrollView>
+    );
+  }
+
+  if (createdList.error) {
+    return (
+      <SecondaryLayoutWithoutScrollView>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Une erreur est survenue...</Text>
+        </View>
+      </SecondaryLayoutWithoutScrollView>
     );
   }
 
@@ -52,13 +55,13 @@ export default function CreatedListScreen() {
     <SecondaryLayoutWithoutScrollView>
       <View className='flex-1 py-10 gap-6'>
         <FlatList
-          data={riddles}
+          data={createdList.riddles}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
-          onEndReached={handleLoadMore}
+          // onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
           ListFooterComponent={
-            isLoading ? (
+            createdList.isLoading ? (
               <ActivityIndicator size="large" color="#2563EB" className='mt-4' />
             ) : null
           }

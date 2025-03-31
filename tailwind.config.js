@@ -5,6 +5,16 @@ module.exports = {
     "./components/**/*.{js,jsx,ts,tsx}"
   ],
   presets: [require("nativewind/preset")],
+  purge: {
+    safelist: [
+      'bg-red-200',
+      'bg-red-300',
+      'bg-red-400',
+      'dark:bg-red-200',
+      'dark:bg-red-300',
+      'dark:bg-red-400',
+    ],
+  },
   darkMode: "class",
   theme: {
     extend: {

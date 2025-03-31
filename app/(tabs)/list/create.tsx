@@ -12,6 +12,7 @@ import colors from '@/constants/colors';
 import { DESCRIPTION_MAX_LENGTH } from '@/constants/constants';
 import { useAutoSaveForm, loadFormState, clearFormState } from '@/hooks/useAutoSaveForm';
 import { DraftCreate, useRiddleStore } from '@/stores/useRiddleStore';
+import { router } from 'expo-router';
 
 const STORAGE_KEY = 'createRiddle';
 
@@ -24,10 +25,6 @@ export default function CreateScreen() {
     is_private: false,
     password: null,
     status: 'draft' as 'draft',
-    // latitude: 45.041446,
-    // longitude: 3.883930,
-    // latitudeDelta: 0.0922,
-    // longitudeDelta: 0.0421,
   });
   const [mapCoordinate, setMapCoordinate] = useState({
     latitude: 45.041446,
@@ -36,14 +33,14 @@ export default function CreateScreen() {
     longitudeDelta: 0.0421,
   });
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const savedState = await loadFormState(STORAGE_KEY);
-  //     if (savedState) {
-  //       setInitialValues(savedState);
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const savedState = await loadFormState(STORAGE_KEY);
+      if (savedState) {
+        setInitialValues(savedState);
+      }
+    })();
+  }, []);
 
   const handleAutoSave = (values: any) => {
     // On sauvegarde aussi les coordonnées à partir de la carte
@@ -55,8 +52,7 @@ export default function CreateScreen() {
   };
 
   // Utilisation du hook pour sauvegarder automatiquement
-  // useAutoSaveForm(initialValues, STORAGE_KEY, handleAutoSave);
-  // useAutoSaveForm(initialValues, STORAGE_KEY);
+  useAutoSaveForm(initialValues, STORAGE_KEY, handleAutoSave);
 
   const onMapPress = (e: MapPressEvent) => {
     const { latitude, longitude } = e.nativeEvent.coordinate;
@@ -65,24 +61,21 @@ export default function CreateScreen() {
       latitude,
       longitude,
     }));
-    // setInitialValues((prev) => ({
-    //   ...prev,
-    //   latitude,
-    //   longitude,
-    // }));
+
     console.log(initialValues)
   };
 
   const handleSubmit = async (values: any) => {
-    // Ici votre code de soumission. Ex : appel de service API, etc.
     const data: DraftCreate = {
       ...values,
-      latitude: String(mapCoordinate.latitude), // ou String(mapCoordinate.latitude)
-      longitude: String(mapCoordinate.longitude), // ou String(mapCoordinate.longitude)
+      latitude: String(mapCoordinate.latitude),
+      longitude: String(mapCoordinate.longitude),
     };
-    await createRiddle(data);
-    console.log('Form submitted', data);
+    const riddle = await createRiddle(data);
+    console.log('Form submitted', data, 'riddle created : ', riddle);
     
+    router.push(`/riddles/created/${riddle?.id}`);
+
     // En cas de succès, on efface l'état sauvegardé
     await clearFormState(STORAGE_KEY);
   };

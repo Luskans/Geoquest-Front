@@ -67,7 +67,7 @@ export interface RiddleState {
   fetchRiddleList: (params?: { limit?: number; offset?: number; }) => Promise<void>;
   fetchRiddleDetail: (id: string) => Promise<void>;
   fetchCreatedList: (params?: { limit?: number; offset?: number }) => Promise<void>;
-  createRiddle: (data: DraftCreate) => Promise<void>;
+  createRiddle: (data: DraftCreate) => Promise<RiddleDetail | void>;
   updateRiddle: (id: string, data: Partial<DraftCreate>) => Promise<void>;
   deleteRiddle: (id: string) => Promise<void>;
 }
@@ -183,7 +183,7 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
       }));
 
     } catch (error: any) {
-      console.error('Erreur lors du fetch des énigmes créées:', error);
+      console.error('Erreur lors du fetch des énigmes créées:', error.response?.data?.message);
       set((state) => ({
         createdList: {
           ...state.createdList,
@@ -206,6 +206,7 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
     try {
       const response = await axios.post(`${API_URL}/riddles`, data);
 
+      return response.data;
       // set((state) => ({
       //   draftCreate: {
       //     ...state.draftCreate,
