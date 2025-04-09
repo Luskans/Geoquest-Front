@@ -30,25 +30,24 @@ export interface StepList {
   riddle_id: number;
   order_number: number;
   qr_code: string;
-  latitude: string;
-  longitude: string;
-  created_at: string;
-  updated_at: string;
+  // latitude: string;
+  // longitude: string;
+  // created_at: string;
+  // updated_at: string;
 }
 
 export interface DraftCreate {
-  riddle_id: number;
-  order_number: number;
-  qr_code: string;
+  // riddle_id: number;
+  // order_number: number;
+  // qr_code: string;
   latitude: string;
   longitude: string;
-  hints: Hint[];
+  // hints: Hint[];
 }
 
 export interface StepState {
   stepList: {
-    steps: StepList[] | null;
-    offset: number;
+    steps: StepList[];
     isLoading: boolean;
     error: string | null;
   }
@@ -57,18 +56,21 @@ export interface StepState {
     isLoading: boolean;
     error: string | null;
   }
-  draftCreate: DraftCreate[] | null;
-  fetchStepList: (params?: { limit?: number; offset?: number }) => Promise<void>;
-  fetchStepDetail: (id: number) => Promise<void>;
-  createStep: (data: DraftCreate) => Promise<void>;
-  updateStep: (id: number, data: Partial<DraftCreate>) => Promise<void>;
-  deleteStep: (id: number) => Promise<void>;
+  draftCreate: {
+    isLoading: boolean,
+    error: string | null,
+  },
+
+  fetchStepList: (id: string) => Promise<void>;
+  fetchStepDetail: (id: string) => Promise<void>;
+  createStep: (riddleId: string, data: DraftCreate) => Promise<StepDetail | void>;
+  updateStep: (id: string, data: Partial<DraftCreate>) => Promise<void>;
+  deleteStep: (id: string) => Promise<void>;
 }
 
 export const useStepStore = create<StepState>((set, get) => ({
   stepList: {
     steps: [],
-    offset: 0,
     isLoading: false,
     error: null,
   },
@@ -77,35 +79,38 @@ export const useStepStore = create<StepState>((set, get) => ({
     isLoading: false,
     error: null,
   },
-  draftCreate: [],
+  draftCreate: {
+    isLoading: false,
+    error: null,
+  },
 
-  fetchStepList: async ({ limit = 20, offset = 0 } = {}) => {
+  fetchStepList: async (id) => {
     set((state) => ({
       stepList: { ...state.stepList, isLoading: true, error: null }
     }));
+
     try {
-      const response = await axios.get(`${API_URL}/steps/list`, {
-        params: { limit, offset }
-      });
-      const data = response.data; // on attend { steps: StepList[] }
+      const response = await axios.get(`${API_URL}/riddles/${id}/steps`);
+      const data = response.data;
+      console.log("response data", data);
+
       set((state) => ({
         stepList: {
           ...state.stepList,
-          steps: [...state.stepList.steps, ...data.steps],
-          offset: state.stepList.offset + data.steps.length
+          steps: data || [],
+          isLoading: false,
+          error: null,
         }
       }));
+
     } catch (error: any) {
       console.error('Erreur lors du fetch de la liste des steps:', error);
       set((state) => ({
         stepList: {
           ...state.stepList,
+          isLoading: false,
           error: error.response?.data?.message || 'Erreur lors du chargement de la liste des steps'
         }
-      }));
-    } finally {
-      set((state) => ({
-        stepList: { ...state.stepList, isLoading: false }
       }));
     }
   },
@@ -139,18 +144,28 @@ export const useStepStore = create<StepState>((set, get) => ({
     }
   },
 
-  // Crée une nouvelle step
-  createStep: async (data: DraftCreate) => {
+  createStep: async (riddleId, data) => {
+    set((state) => ({
+      draftCreate: { ...state.draftCreate, isLoading: true, error: null },
+    }));
+
     try {
-      const response = await axios.post(`${API_URL}/steps`, data);
-      set((state) => ({
-        stepList: {
-          ...state.stepList,
-          steps: [response.data, ...state.stepList.steps],
-        }
-      }));
+      const response = await axios.post(`${API_URL}/riddles/${riddleId}/steps`, data);
+      return response.data;
+    
     } catch (error: any) {
       console.error('Erreur lors de la création de la step:', error);
+      set((state) => ({
+        draftCreate: {
+          ...state.draftCreate,
+          error: error.response?.data?.message || 'Erreur lors du chargement de la liste des étapes',
+        },
+      }));
+
+    } finally {
+      set((state) => ({
+        draftCreate: { ...state.draftCreate, isLoading: false },
+      }));
     }
   },
 

@@ -61,8 +61,6 @@ export default function CreateScreen() {
       latitude,
       longitude,
     }));
-
-    console.log(initialValues)
   };
 
   const handleSubmit = async (values: any) => {
@@ -72,9 +70,11 @@ export default function CreateScreen() {
       longitude: String(mapCoordinate.longitude),
     };
     const riddle = await createRiddle(data);
-    console.log('Form submitted', data, 'riddle created : ', riddle);
     
-    router.push(`/riddles/created/${riddle?.id}`);
+    // TODO : mettre un toast
+    alert('Énigme mise à jour avec succès !'); 
+
+    router.replace(`/riddles/created/${riddle?.id}`);
 
     // En cas de succès, on efface l'état sauvegardé
     await clearFormState(STORAGE_KEY);
@@ -106,7 +106,7 @@ export default function CreateScreen() {
 
                 {/* Privée ou publique */}
                 <View className="px-6 flex-1 gap-3">
-                  <Text className="text-dark dark:text-light">Partie</Text>
+                  <Text className="text-dark dark:text-light">Partie :</Text>
                   <View className='flex-row'>
                     <TouchableOpacity onPress={() => {setFieldValue('is_private', false); setFieldTouched('is_private', true , true); setFieldValue('password', null); console.log(values)}} className="flex-1 flex-row items-center">
                       <View className={`w-5 h-5 border border-gray-400 rounded-full ${!values.is_private ? 'bg-secondary-darker dark:bg-secondary-lighter' : ''}`} />
@@ -133,7 +133,7 @@ export default function CreateScreen() {
                 <View className='px-6'>
                   <FormField
                     name="title"
-                    label="Titre"
+                    label="Titre :"
                     placeholder="Entrez le titre de votre énigme"
                     // onChangeText={(text: string) => setFieldValue('title', text)}
                     // value={values.title}
@@ -145,7 +145,7 @@ export default function CreateScreen() {
                   {/* <Text className="text-dark dark:text-light mb-2">Description</Text> */}
                   <FormField
                     name="description"
-                    label="Description"
+                    label="Description :"
                     className="bg-gray-50 border border-gray-300 rounded-lg p-3"
                     multiline
                     numberOfLines={10}

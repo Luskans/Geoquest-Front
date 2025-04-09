@@ -1,6 +1,7 @@
 import { useThemeStore } from '@/stores/useThemeStore';
 import { Stack } from 'expo-router';
 import colors from "@/constants/colors";
+import HeaderBackButton from '@/components/common/HeaderBackButton';
 
 export default function RiddlesLayout() {
   const { isDark } = useThemeStore();
@@ -18,7 +19,7 @@ export default function RiddlesLayout() {
     <Stack
       screenOptions={{
         headerShadowVisible: false,
-        animation: 'slide_from_right'
+        animation: 'slide_from_right',
       }}
     >
       <Stack.Screen 
@@ -31,16 +32,31 @@ export default function RiddlesLayout() {
         name="created/[id]/index"
         options={{ 
           title: '',
+          headerBackVisible: false,
+          headerLeft: () => <HeaderBackButton />,
+          // gestureEnabled: false
         }}
       />
       <Stack.Screen 
-        name="created/[id]/steps/[id]"
+        name="created/[id]/steps/stepCreate"
         options={{ 
           title: '',
         }}
       />
       <Stack.Screen 
-        name="created/[id]/qrcodes/[id]"
+        name="created/[id]/steps/[id]/index"
+        options={{ 
+          title: '',
+        }}
+      />
+      <Stack.Screen 
+        name="created/[id]/steps/[id]/qrcode"
+        options={{ 
+          title: '',
+        }}
+      />
+      <Stack.Screen 
+        name="created/[id]/steps/[id]/hintCreate"
         options={{ 
           title: '',
         }}

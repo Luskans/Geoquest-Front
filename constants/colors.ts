@@ -8,7 +8,7 @@ export default {
   },
   secondary: {
     mid: '#e6a87c',
-    lighter: '#928cd4',
+    lighter: '#c2bdff',
     darker: '#574fab'
   },
   white: "#ffffff",

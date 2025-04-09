@@ -62,7 +62,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
         </View>
       </TouchableOpacity>
       {!collapsed && (
-        <View className='p-6'>
+        <View className='py-6'>
           {children}
         </View>
       )}

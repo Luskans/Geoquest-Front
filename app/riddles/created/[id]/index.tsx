@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, Text, ActivityIndicator, TextInput, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useGlobalSearchParams, useFocusEffect } from 'expo-router';
 import SecondaryLayoutWithoutScrollView from '@/components/layouts/SecondaryLayoutWithoutScrollView';
@@ -12,63 +12,86 @@ import moment from 'moment';
 import SecondaryLayout from '@/components/layouts/SecondaryLayout';
 import GradientButton from '@/components/common/GradientButton';
 import GhostButton from '@/components/common/GhostButton';
+import { useRiddleStore } from '@/stores/useRiddleStore';
+import { useStepStore } from '@/stores/useStepStore';
+import { useReviewStore } from '@/stores/useReviewStore';
+import { useLeaderboardStore } from '@/stores/useLeaderboardStore';
+import UpdateForm from '@/components/riddleDetail/UpdateForm';
+import StepList from '@/components/riddleDetail/StepList';
+import QrCodeList from '@/components/riddleDetail/QrCodeList';
 
 export default function CreatedDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { riddle, fetchRiddleData, isLoading, error } = useSelectedRiddleStore();
+  // const { riddleDetail, updateRiddle, deleteRiddle, fetchRiddleDetail } = useRiddleStore();
+  const { stepList, fetchStepList } = useStepStore();
+  // const { reviewList, fetchReviewList } = useReviewStore();
+  // const { gameLeaderboard, fetchGameLeaderboard } = useLeaderboardStore();
   const { isDark } = useThemeStore();
 
   useFocusEffect(
     useCallback(() => {
-      fetchRiddleData({ id });
-    }, [fetchRiddleData, id])
+      if (id) {
+        // fetchRiddleDetail(id);
+        fetchStepList(id);
+        // fetchReviewList(id);
+        // fetchRiddleLeaderboard(id);
+      }
+    }, [id, fetchStepList])
   );
-  console.log(riddle);
+  console.log("step list", stepList)
+  // const renderMainButton = () => {
+  //   const status = riddleDetail.riddle?.status;
 
-  if (isLoading) {
-    return (
-      <SecondaryLayoutWithoutScrollView>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#2563EB" />
-        </View>
-      </SecondaryLayoutWithoutScrollView>
-    );
-  }
+  //   if (status === 'active') {
+  //     return (
+  //       <GradientButton
+  //         onPress={() => updateRiddle(id, { status: 'draft' })}
+  //         title="Dépublier"
+  //         colors={isDark ? [colors.primary.lighter, colors.primary.lighter] : [colors.primary.darker, colors.primary.darker]}
+  //         textColor={isDark ? 'text-dark' : 'text-light'}
+  //       />
+  //     );
+  //   } else if (status === 'draft') {
+  //     return (
+  //       <GradientButton
+  //         onPress={() => updateRiddle(id, { status: 'active' })}
+  //         title="Publier"
+  //         colors={isDark ? [colors.primary.lighter, colors.primary.lighter] : [colors.primary.darker, colors.primary.darker]}
+  //         textColor={isDark ? 'text-dark' : 'text-light'}
+  //       />
+  //     );
+  //   } else {
+  //     return (
+  //       <GradientButton
+  //         onPress={() => updateRiddle(id, { status: 'active' })}
+  //         title="Vérifier"
+  //         colors={isDark ? [colors.primary.lighter, colors.primary.lighter] : [colors.primary.darker, colors.primary.darker]}
+  //         textColor={isDark ? 'text-dark' : 'text-light'}
+  //       />
+  //     );
+  //   }
+  // };
 
-  if (error) {
-    return (
-      <SecondaryLayoutWithoutScrollView>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>{error}</Text>
-        </View>
-      </SecondaryLayoutWithoutScrollView>
-    );
-  }
-
-  if (!riddle) {
-    return (
-      <SecondaryLayoutWithoutScrollView>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>Aucune donnée pour cet énigme</Text>
-        </View>
-      </SecondaryLayoutWithoutScrollView>
-    );
-  }
+  const handleDelete = () => {
+    // Ajouter une confirmation avant de supprimer ?
+    // Alert.alert("Confirmation", "Voulez-vous vraiment supprimer cette énigme ?", [ { text: "Annuler" }, { text: "Supprimer", onPress: () => deleteRiddle(riddleId) } ]);
+    console.log("Suppression de l'énigme :", id);
+    // deleteRiddle(id);
+    // Peut-être naviguer en arrière après suppression ? router.back();
+  };
 
   return (
     <SecondaryLayout>
       <View className='py-10 gap-4'>
-        <View className='px-6 mb-8'>
+        {/* <View className='px-6 mb-8'>
           <Text
             className='text-xl text-dark dark:text-light font-semibold mb-1'
             numberOfLines={2}
             ellipsizeMode="tail"
           >
-            {riddle.title}
+            {riddleDetail.riddle.title}
           </Text>
-          {/* <Text className='text-gray-400 dark:text-gray-400'>{ moment(riddle.created_at).format('DD-MM-YYYY') }</Text>
-          <Text className='text-gray-400 dark:text-gray-400 mb-3'>Localisation</Text> */}
-          {!riddle.is_private
+          {riddleDetail.riddle.is_private
             ? <View className='flex-row gap-3 items-center'>
                 <TextInput
                   className='flex-1 bg-gray-200 text-gray-600 border rounded-lg p-2 border-gray-300'
@@ -81,83 +104,65 @@ export default function CreatedDetailScreen() {
               </View>
             : ''
           }
-        </View>
+        </View> */}
         
         <CollapsibleSection
           title="Informations générales"
           icon="information-circle-outline"
         >
-          <Text style={{ marginBottom: 6 }}>Description : {riddle.description}</Text>
-          <Text>Date : {riddle.created_at.split(' ')[0]}</Text>
+          <UpdateForm />
         </CollapsibleSection>
         
         <CollapsibleSection 
           title="Etapes"
           icon="footsteps-outline"
-          number={riddle.steps ? riddle.steps.length : 0}
+          number={stepList.steps.length}
         >
-          {riddle.steps && riddle.steps.map((step: Step) => (
-            <Text key={step.id} style={{ marginBottom: 4 }}>
-              Étape {step.order_number} - QR : {step.qr_code}
-            </Text>
-          ))}
+          <StepList stepList={stepList} />
         </CollapsibleSection>
         
         <CollapsibleSection 
           title="QR codes"
           icon="qr-code-outline"
         >
-          {riddle.steps && riddle.steps.map((step: Step) => (
-            <Text key={step.id} style={{ marginBottom: 4 }}>
-              QR Code pour Étape {step.order_number} : {step.qr_code}
-            </Text>
-          ))}
+          <QrCodeList stepList={stepList} />
         </CollapsibleSection>
 
-        <CollapsibleSection
+        {/* <CollapsibleSection
           title="Avis"
           icon="chatbubble-ellipses-outline"
-          number={riddle.reviews ? riddle.reviews.length : 0}
+          number={reviewList.reviews.length}
         >
-          {riddle.reviews && riddle.reviews.map((review: Review) => (
-            <Text key={review.id} style={{ marginBottom: 4 }}>
-              Avis {review.rating} : {review.content}
-            </Text>
+          {reviewList.reviews.map((review: Review) => (
+            <View key={review.id} style={{ marginBottom: 4 }}>
+              <View>Photo, auteur name, date</View>
+              <Text>
+                Avis {review.rating} : {review.content}
+              </Text>
+            </View>
           ))}
-        </CollapsibleSection>
+        </CollapsibleSection> */}
 
-        <CollapsibleSection 
+        {/* <CollapsibleSection 
           title="Classement"
           icon="trophy-outline"
         >
-          {riddle.game_sessions && riddle.game_sessions.map((session: GameSession) => (
+          {gameLeaderboard.leaderboard.map((session: GameSession) => (
             <Text key={session.id} style={{ marginBottom: 4 }}>
               Classement : {session.score}
             </Text>
           ))}
-        </CollapsibleSection>
+        </CollapsibleSection> */}
 
-        <Text className={`${getStatusColor(riddle.status)} w-auto self-center text-sm py-0.5 px-2.5 rounded-full mt-8`}>
-          { riddle.status }
-        </Text>
+        {/* <Text className={`${getStatusColor(riddleDetail.riddle.status)} w-auto self-center text-sm py-0.5 px-2.5 rounded-full mt-8`}>
+          { riddleDetail.riddle.status }
+        </Text> */}
 
         <View className='px-6 flex-1 flex-row gap-3 items-center justify-center'>
-          {riddle.status === "active"
-          ? <GradientButton
-              onPress={() => ""}
-              title="Brouillon"
-              colors={isDark ? [colors.primary.lighter, colors.primary.lighter] : [colors.primary.darker, colors.primary.darker]}
-              textColor={isDark ? 'text-dark' : 'text-light'}
-            />
-          : <GradientButton
-              onPress={() => ""}
-              title="Publier"
-              colors={isDark ? [colors.primary.lighter, colors.primary.lighter] : [colors.primary.darker, colors.primary.darker]}
-              textColor={isDark ? 'text-dark' : 'text-light'}
-            />
-          }
+          {/* {renderMainButton()} */}
+
           <GhostButton
-            onPress={() => ""}
+            onPress={handleDelete}
             title="Supprimer"
             color={isDark ? 'border-primary-lighter' : 'border-primary-darker'}
             textColor={isDark ? 'text-primary-lighter' : 'text-primary-darker'}

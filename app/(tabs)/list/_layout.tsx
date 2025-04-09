@@ -23,7 +23,7 @@ export default function ListLayout() {
         }}
       />
       <Stack.Screen 
-        name="create"
+        name="riddleCreate"
         options={{ 
           title: 'Nouvelle énigme',
         }}

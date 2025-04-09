@@ -43,10 +43,11 @@ export interface DraftCreate {
 
 export interface RiddleState {
   riddleList: {
-    riddles: RiddleList[] | null;
+    riddles: RiddleList[];
     offset: number;
     isLoading: boolean;
     error: string | null;
+    hasMore: boolean;
   }
   riddleDetail: {
     riddle: RiddleDetail | null;
@@ -54,10 +55,11 @@ export interface RiddleState {
     error: string | null;
   }
   createdList: {
-    riddles: RiddleList[] | null;
+    riddles: RiddleList[];
     offset: number;
     isLoading: boolean;
     error: string | null;
+    hasMore: boolean;
   }
   draftCreate: {
     // riddle: DraftCreate | null;
@@ -78,6 +80,7 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
     offset: 0,
     isLoading: false,
     error: null,
+    hasMore: true,
   },
   riddleDetail: {
     riddle: null,
@@ -89,6 +92,7 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
     offset: 0,
     isLoading: false,
     error: null,
+    hasMore: true,
   },
   draftCreate: {
     // riddle: null,
@@ -131,7 +135,7 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
     }
   },
 
-  fetchRiddleDetail: async (id: string) => {
+  fetchRiddleDetail: async (id) => {
     set((state) => ({
       riddleDetail: { ...state.riddleDetail, isLoading: true, error: null },
     }));
@@ -179,6 +183,9 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
           ...state.createdList,
           riddles: [...state.createdList.riddles, ...data.riddles],
           offset: state.createdList.offset + data.riddles.length,
+          isLoading: false,
+          error: null,
+          hasMore: data.riddles.length === limit
         },
       }));
 
@@ -188,12 +195,8 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
         createdList: {
           ...state.createdList,
           error: error.response?.data?.message || 'Erreur lors du chargement des énigmes créées',
+          isLoading: false
         },
-      }));
-
-    } finally {
-      set((state) => ({
-        createdList: { ...state.createdList, isLoading: false },
       }));
     }
   },
@@ -205,14 +208,7 @@ export const useRiddleStore = create<RiddleState>((set, get) => ({
 
     try {
       const response = await axios.post(`${API_URL}/riddles`, data);
-
       return response.data;
-      // set((state) => ({
-      //   draftCreate: {
-      //     ...state.draftCreate,
-      //     riddle: response.data,
-      //   },
-      // }));
 
     } catch (error: any) {
       console.error('Erreur lors de la création de l\'énigme:', error);

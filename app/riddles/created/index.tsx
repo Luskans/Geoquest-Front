@@ -1,6 +1,6 @@
 import { Link, useFocusEffect } from 'expo-router';
 import { View, ActivityIndicator, FlatList, TouchableOpacity, Text } from 'react-native';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import SecondaryLayoutWithoutScrollView from '@/components/layouts/SecondaryLayoutWithoutScrollView';
 import CreatedListCard from '@/components/list/CreatedListCard';
 import { useRiddleStore } from '@/stores/useRiddleStore';
@@ -10,19 +10,21 @@ export default function CreatedListScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchCreatedList({ limit: 20, offset: 0 });
-    }, [fetchCreatedList])
+      if (createdList.riddles.length === 0 && !createdList.isLoading) {
+        fetchCreatedList({ limit: 20, offset: 0 });
+      }
+    }, [fetchCreatedList, createdList.riddles.length, createdList.isLoading])
   );
 
-  // const handleLoadMore = async () => {
-  //   if (!isLoading && hasMore) {
-  //     await fetchRiddlesData({ limit: 20, offset });
-  //   }
-  // };
+  const handleLoadMore = async () => {
+    if (!createdList.isLoading && createdList.hasMore) {
+      await fetchCreatedList({ limit: 20, offset: createdList.offset });
+    }
+  };
 
   const renderItem = ({ item }: { item: any }) => (
     <>
-      <Link href={`/riddles/created/${item.id}`} className='py-6' asChild>
+      <Link href={`/riddles/created/${item.id.toString()}`} className='py-6' asChild>
         <TouchableOpacity className=''>
           <CreatedListCard riddle={item} />
         </TouchableOpacity>
@@ -51,6 +53,16 @@ export default function CreatedListScreen() {
     );
   }
 
+  if (!createdList.isLoading && createdList.riddles.length === 0 && !createdList.error) {
+    return (
+      <SecondaryLayoutWithoutScrollView>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Aucune énigme créée pour le moment.</Text>
+        </View>
+      </SecondaryLayoutWithoutScrollView>
+    );
+  }
+
   return (
     <SecondaryLayoutWithoutScrollView>
       <View className='flex-1 py-10 gap-6'>
@@ -58,7 +70,7 @@ export default function CreatedListScreen() {
           data={createdList.riddles}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
-          // onEndReached={handleLoadMore}
+          onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
           ListFooterComponent={
             createdList.isLoading ? (
